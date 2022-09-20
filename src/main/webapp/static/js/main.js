@@ -2,7 +2,7 @@ const mainContainer = document.querySelector("#container")
 
 const homeUrl = '/';
 const orderUrl = '/order';
-const jobsUrl = '/apiJobs';
+const removeFiltersLink = document.querySelector("#removeFilters");
 let category = null;
 let supplier = 0;
 let baseUrl = `/?category=${category}`;
@@ -17,6 +17,7 @@ function displayWebsite(){
 
 function initPage() {
     addEventListenersToCategoryLinks();
+    addEventListenerRemoveFilters();
     //addEventListenersToSupplierLinks();
 }
 
@@ -28,9 +29,7 @@ function addEventListenersToCategoryLinks(){
             e.preventDefault();
             categoryNum = link.getAttribute("data-category");
             baseUrl = `/?category=${categoryNum}`;
-            console.log(baseUrl);
             category = link.innerHTML;
-            console.log(category);
             location.href = baseUrl;
             changeCategoryName(category);
         })
@@ -40,6 +39,13 @@ function addEventListenersToCategoryLinks(){
 function changeCategoryName(newName){
     const categoryName = document.querySelector("#category-name");
     categoryName.innerHTML = newName;
+}
+
+function addEventListenerRemoveFilters(){
+    removeFiltersLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        location.href = "/";
+    })
 }
 
 displayWebsite()
