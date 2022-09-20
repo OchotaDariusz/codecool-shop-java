@@ -36,10 +36,12 @@ public class ProductController extends HttpServlet {
 
         //setup WebContext
         if(category==null){
+            context.setVariable("category_name", "All categories");
             context.setVariable("category", productService.getProductCategory(1));
             System.out.println(productService.getProductCategory(1));
             context.setVariable("products", productDataStore.getAll());
         } else {
+            context.setVariable("category name", productService.getProductCategory(Integer.parseInt(category)).getName());
             context.setVariable("category", productService.getProductCategory(Integer.parseInt(category)));
             context.setVariable("products", productService.getProductsForCategory(Integer.parseInt(category)));
         }
