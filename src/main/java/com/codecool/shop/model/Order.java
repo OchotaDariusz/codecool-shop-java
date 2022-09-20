@@ -2,7 +2,6 @@ package com.codecool.shop.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,8 +9,7 @@ public class Order extends BaseModel {
 
 
 
-    private BigDecimal price;
-    private Currency currency;
+    private BigDecimal amount;
     private OrderStatus status;
 
     private LocalDateTime date;
@@ -36,18 +34,10 @@ public class Order extends BaseModel {
         this.status = status;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
 
     private Map<Product, Integer> cart = new HashMap<>();
 
@@ -60,7 +50,7 @@ public class Order extends BaseModel {
             } else {
                 cart.put(product, 1);
             }
-            price = price.add(product.getDefaultPrice());
+            amount = amount.add(product.getDefaultPrice());
             return true;
         } catch (Exception e) {
             return false;
@@ -70,7 +60,7 @@ public class Order extends BaseModel {
     public boolean removeProductFromCart(Product product) {
         try {
             cart.remove(product);
-            price = price.subtract(product.getDefaultPrice());
+            amount = amount.subtract(product.getDefaultPrice());
             return true;
         } catch (Exception e) {
             return false;
@@ -87,7 +77,7 @@ public class Order extends BaseModel {
                     cart.put(product, numberOfProducts - 1);
                 }
             }
-            price = price.subtract(product.getDefaultPrice());
+            amount = amount.subtract(product.getDefaultPrice());
             return true;
         } catch (Exception e) {
             return false;
@@ -98,7 +88,7 @@ public class Order extends BaseModel {
         try {
             int numberOfProducts = cart.get(product);
             cart.put(product, numberOfProducts + 1);
-            price = price.add(product.getDefaultPrice());
+            amount = amount.add(product.getDefaultPrice());
             return true;
         } catch (Exception e) {
             return false;
