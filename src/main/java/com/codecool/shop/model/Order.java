@@ -11,10 +11,12 @@ public class Order extends BaseModel {
 
     private BigDecimal amount;
     private OrderStatus status;
+    private int userId;
 
     private LocalDateTime date;
 
-    public Order() {
+    public Order(int userId) {
+        this.userId = userId;
         this.status = OrderStatus.ORDERED;
         this.date = LocalDateTime.now();
     }
