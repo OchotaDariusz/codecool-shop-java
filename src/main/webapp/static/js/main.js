@@ -17,18 +17,33 @@ function displayWebsite(){
 
 function initPage() {
     addEventListenersToCategoryLinks();
+    addEventListenersToSupplierLinks();
     addEventListenerRemoveFilters();
     //addEventListenersToSupplierLinks();
 }
 
 
 function addEventListenersToCategoryLinks(){
-    const clickableLinks = document.querySelectorAll(".dropdown-item");
+    const clickableLinks = document.querySelectorAll(".category");
     clickableLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             categoryNum = link.getAttribute("data-category");
             baseUrl = `/?category=${categoryNum}`;
+            category = link.innerHTML;
+            location.href = baseUrl;
+            changeCategoryName(category);
+        })
+    })
+}
+
+function addEventListenersToSupplierLinks(){
+    const clickableLinks = document.querySelectorAll(".supplier");
+    clickableLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            categoryNum = link.getAttribute("data-category");
+            baseUrl = `/?supplier=${categoryNum}`;
             category = link.innerHTML;
             location.href = baseUrl;
             changeCategoryName(category);

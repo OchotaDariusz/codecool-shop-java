@@ -56,12 +56,13 @@
                     </a>
                     <div class="dropdown-menu">
                         <div th:each="cat: ${categories}">
-                            <a class="dropdown-item" href="#" th:attr="data-category=${cat.id}" th:text="${cat.name}">Category</a>
+                            <a class="dropdown-item category" href="#" th:attr="data-category=${cat.id}" th:text="${cat.name}">Category</a>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
+
         <div class="collapse navbar-collapse" id="navbarNavDropdownSuppliers">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
@@ -71,7 +72,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <div th:each="sup: ${suppliers}">
-                            <a class="dropdown-item" href="#" th:attr="data-category=${sup.id}" th:text="${sup.name}">Category</a>
+                            <a class="dropdown-item supplier" href="#" th:attr="data-category=${sup.id}" th:text="${sup.name}">Category</a>
                         </div>
                     </div>
                 </li>
