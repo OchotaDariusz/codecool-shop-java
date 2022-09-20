@@ -2,8 +2,10 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
@@ -25,7 +27,8 @@ public class ProductController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore,productCategoryDataStore);
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -35,17 +38,21 @@ public class ProductController extends HttpServlet {
         String supplier = req.getParameter("supplier");
 
         //setup WebContext
-        if(category==null){
-            context.setVariable("category_name", "All categories");
+        if(category==null && supplier==null){
+            //context.setVariable("category_name", "All categories");
             context.setVariable("category", productService.getProductCategory(1));
             System.out.println(productService.getProductCategory(1));
             context.setVariable("products", productDataStore.getAll());
-        } else {
-            context.setVariable("category name", productService.getProductCategory(Integer.parseInt(category)).getName());
+        } else if (category!=null && supplier==null){
+            //context.setVariable("category name", productService.getProductCategory(Integer.parseInt(category)).getName());
             context.setVariable("category", productService.getProductCategory(Integer.parseInt(category)));
             context.setVariable("products", productService.getProductsForCategory(Integer.parseInt(category)));
+        } else if (category==null && supplier!=null){
+            context.setVariable("supplier", productService.getSupplier(Integer.parseInt(supplier)));
+            context.setVariable("products", productService.getProductsForSupplier(Integer.parseInt(supplier)));
         }
         context.setVariable("categories", productService.getAllCategories());
+        context.setVariable("suppliers", productService.getAllSuppliers());
         /*
         if(supplier==null){
             supplier = "0";

@@ -62,6 +62,21 @@
                 </li>
             </ul>
         </div>
+        <div class="collapse navbar-collapse" id="navbarNavDropdownSuppliers">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                       aria-expanded="false">
+                        Suppliers
+                    </a>
+                    <div class="dropdown-menu">
+                        <div th:each="sup: ${suppliers}">
+                            <a class="dropdown-item" href="#" th:attr="data-category=${sup.id}" th:text="${sup.name}">Category</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </nav>
     <div class="card-text">
         <a id="removeFilters" href="#">Remove all filters</a>
