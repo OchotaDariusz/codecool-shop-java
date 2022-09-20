@@ -1,14 +1,8 @@
 package com.codecool.shop.config;
 
-import com.codecool.shop.dao.ProductCategoryDao;
-import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
-import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
-import com.codecool.shop.model.Product;
-import com.codecool.shop.model.ProductCategory;
-import com.codecool.shop.model.Supplier;
+import com.codecool.shop.dao.*;
+import com.codecool.shop.dao.implementation.*;
+import com.codecool.shop.model.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -20,11 +14,11 @@ public class Initializer implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-
-
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        OrderDao orderDataStore = OrderDaoMem.getInstance();
+        UserDao userDataStore = UserDaoMem.getInstance();
 
         //setting up a new supplier
         Supplier amazon = new Supplier("Amazon", "Digital content and services");
@@ -62,5 +56,11 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Galaxy S22 Ultra", new BigDecimal("1249.9"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
         productDataStore.add(new Product("Galaxy S21 FE 5G", new BigDecimal("809.0"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
         productDataStore.add(new Product("Galaxy Z Flip4 I Bespoke Edition", new BigDecimal("1169.9"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
+
+        //setting up users
+        userDataStore.add(new User("Tomek"));
+
+        //setting up test order
+        orderDataStore.add(new Order(1));
     }
 }
