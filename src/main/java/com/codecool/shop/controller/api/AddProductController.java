@@ -20,10 +20,13 @@ public class AddProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String productId = req.getParameter("product_id");
+        String productId = req.getReader().readLine();
+
+        System.out.println(productId); //TODO: extract id from json
         // get order object from order dao + call addProductToCart method on that object
         // check if user have opened order if not create new one.
         // get user by user id from current session.
+
 
         OrderDao orderDataStore = OrderDaoMem.getInstance();
         Order order = orderDataStore.getOrderById(1); // id zamowienia Tomka

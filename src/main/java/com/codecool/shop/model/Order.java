@@ -7,8 +7,6 @@ import java.util.Map;
 
 public class Order extends BaseModel {
 
-
-
     private BigDecimal amount;
     private OrderStatus status;
     private int userId;
