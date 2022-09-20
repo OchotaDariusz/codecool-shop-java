@@ -2,7 +2,7 @@ const mainContainer = document.querySelector("#container")
 
 const homeUrl = '/';
 const orderUrl = '/order';
-const jobsUrl = '/apiJobs';
+const removeFiltersLink = document.querySelector("#removeFilters");
 let category = null;
 let supplier = 0;
 let baseUrl = `/?category=${category}`;
@@ -17,20 +17,34 @@ function displayWebsite(){
 
 function initPage() {
     addEventListenersToCategoryLinks();
+    addEventListenersToSupplierLinks();
+    addEventListenerRemoveFilters();
     //addEventListenersToSupplierLinks();
 }
 
 
 function addEventListenersToCategoryLinks(){
-    const clickableLinks = document.querySelectorAll(".dropdown-item");
+    const clickableLinks = document.querySelectorAll(".category");
     clickableLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             categoryNum = link.getAttribute("data-category");
             baseUrl = `/?category=${categoryNum}`;
-            console.log(baseUrl);
             category = link.innerHTML;
-            console.log(category);
+            location.href = baseUrl;
+            changeCategoryName(category);
+        })
+    })
+}
+
+function addEventListenersToSupplierLinks(){
+    const clickableLinks = document.querySelectorAll(".supplier");
+    clickableLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            categoryNum = link.getAttribute("data-category");
+            baseUrl = `/?supplier=${categoryNum}`;
+            category = link.innerHTML;
             location.href = baseUrl;
             changeCategoryName(category);
         })
@@ -40,6 +54,13 @@ function addEventListenersToCategoryLinks(){
 function changeCategoryName(newName){
     const categoryName = document.querySelector("#category-name");
     categoryName.innerHTML = newName;
+}
+
+function addEventListenerRemoveFilters(){
+    removeFiltersLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        location.href = "/";
+    })
 }
 
 displayWebsite()
