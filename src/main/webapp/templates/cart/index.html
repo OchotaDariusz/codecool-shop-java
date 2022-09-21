@@ -50,30 +50,18 @@
                 <th scope="col">Product</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
+                <th scope="col"></th>
                 <th scope="col">To pay</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody th:each="product: ${products}"> <!-- // TODO: loop over map -->
             <tr>
-                <th scope="row"><i class="fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td>Laptop</td>
-                <td>200 USD</td>
-                <td>5 <i class="fa-solid fa-minus"></i> <i class="fa-solid fa-plus"></i></td>
+                <th scope="row"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
+                <td th:text="${product.name}">Laptop</td>
+                <td th:text="${product}">200 USD</td>
+                <td th:text="${quantity}">5</td>
+                <td><i class="fa-solid fa-plus"></i>&nbsp;<i class="fa-solid fa-minus"></i></td>
                 <td>1000 USD</td>
-            </tr>
-            <tr>
-                <th scope="row"><i class="fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td>Tablet</td>
-                <td>150 USD</td>
-                <td>2 <i class="fa-solid fa-minus"></i> <i class="fa-solid fa-plus"></td>
-                <td>300 USD</td>
-            </tr>
-            <tr>
-                <th scope="row"><i class="fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td>Desktop PC</td>
-                <td>50 USD</td>
-                <td>1 <i class="fa-solid fa-minus"></i> <i class="fa-solid fa-plus"></td>
-                <td>50 USD</td>
             </tr>
 
             </tbody>
