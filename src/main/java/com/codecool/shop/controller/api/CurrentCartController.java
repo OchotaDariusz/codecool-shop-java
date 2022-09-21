@@ -11,11 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CurrentCartController {
+@WebServlet(name = "CurrentCartServlet", urlPatterns = "/apiCurrentCart")
+public class CurrentCartController extends javax.servlet.http.HttpServlet{
 
-
-    @WebServlet(name = "CurrentCartServlet", urlPatterns = "/apiCurrentCart")
-    public class CurrentCart extends javax.servlet.http.HttpServlet {
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             String allInfo = "{\n" +
@@ -41,7 +39,6 @@ public class CurrentCartController {
             resp.setCharacterEncoding("UTF-8");
             PrintWriter out = resp.getWriter();
             out.println(allInfo);
-
         }
     }
-}
+
