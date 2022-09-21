@@ -40,11 +40,11 @@
 
 <div class="container">
     <div class="card">
-        <a href="/cart">
+        <a href="/cart" class="d-flex justify-content-end">
+        <p id="number-of-products" th:text="${amountOfProductsInCart}">0</p>
             <i class="fa-solid fa-cart-shopping"></i>
         </a>
-        <p id="number-of-products">0</p>
-        <strong id="category-name" th:text="${category.name}">Category</strong>
+        <strong id="category-name" th:text="${category.name}" class="text-center">Category</strong>
     </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"

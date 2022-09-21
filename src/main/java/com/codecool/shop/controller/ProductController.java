@@ -1,11 +1,15 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.model.Order;
+import com.codecool.shop.model.Product;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
@@ -71,6 +75,17 @@ public class ProductController extends HttpServlet {
         // params.put("category", productCategoryDataStore.find(1));
         // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
         // context.setVariables(params);
+        OrderDao orderDataStore = OrderDaoMem.getInstance();
+        Order order = orderDataStore.getOrderById(1);
+        int amountOfProductsInCart = 0;
+        if (order.getCart().size() != 0) {
+            for (Product product : order.getCart().keySet()) {
+                amountOfProductsInCart += order.getCart().get(product);
+            }
+        }
+
+        context.setVariable("amountOfProductsInCart", amountOfProductsInCart);
+
         engine.process("product/index.html", context, resp.getWriter());
     }
 
