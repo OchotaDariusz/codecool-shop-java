@@ -29,6 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/custom.css"/>
     <script src="https://kit.fontawesome.com/671f235a9d.js" crossorigin="anonymous"></script>
+    <script src="/static/js/cart.js" defer></script>
 </head>
 
 <body>
@@ -56,7 +57,7 @@
             </thead>
             <tbody th:each="product: ${products}"> <!-- // TODO: loop over map -->
             <tr>
-                <th scope="row"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
+                <th scope="row" th:attr="data-product-id=${product.getId()}"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
                 <td th:text="${product.getName()}">Laptop</td>
                 <td th:text="${product.getPrice()}">200 USD</td>
                 <td th:text="${productsAmount.get(product)}">5</td>

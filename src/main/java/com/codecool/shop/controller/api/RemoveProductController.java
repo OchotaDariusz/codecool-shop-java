@@ -26,8 +26,6 @@ public class RemoveProductController extends HttpServlet {
 
         JsonObject jsonObject = new Gson().fromJson(productId, JsonObject.class);
 
-        System.out.println(productId); //TODO: extract id from json
-        System.out.println(jsonObject.get("product_id").getAsInt());
         // get order object from order dao + call addProductToCart method on that object
         // check if user have opened order if not create new one.
         // get user by user id from current session.
