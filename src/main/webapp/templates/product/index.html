@@ -40,7 +40,9 @@
 
 <div class="container">
     <div class="card">
-        <i class="fa-solid fa-cart-shopping"></i>
+        <a href="/cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </a>
         <p id="number-of-products">0</p>
         <strong id="category-name" th:text="${category.name}">Category</strong>
     </div>
@@ -59,7 +61,8 @@
                     </a>
                     <div class="dropdown-menu">
                         <div th:each="cat: ${categories}">
-                            <a class="dropdown-item category" href="#" th:attr="data-category=${cat.id}" th:text="${cat.name}">Category</a>
+                            <a class="dropdown-item category" href="#" th:attr="data-category=${cat.id}"
+                               th:text="${cat.name}">Category</a>
                         </div>
                     </div>
                 </li>
@@ -75,7 +78,8 @@
                     </a>
                     <div class="dropdown-menu">
                         <div th:each="sup: ${suppliers}">
-                            <a class="dropdown-item supplier" href="#" th:attr="data-category=${sup.id}" th:text="${sup.name}">Category</a>
+                            <a class="dropdown-item supplier" href="#" th:attr="data-category=${sup.id}"
+                               th:text="${sup.name}">Category</a>
                         </div>
                     </div>
                 </li>
@@ -99,7 +103,8 @@
                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                     </div>
                     <div class="card-text">
-                        <a class="add-to-cart | btn btn-success" href="#" th:attr="data-product-id=${prod.id}">Add to cart</a>
+                        <a class="add-to-cart | btn btn-success" href="#" th:attr="data-product-id=${prod.id}">Add to
+                            cart</a>
                     </div>
                 </div>
             </div>

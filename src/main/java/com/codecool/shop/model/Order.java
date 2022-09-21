@@ -42,58 +42,39 @@ public class Order extends BaseModel {
     private Map<Product, Integer> cart = new HashMap<>();
 
 
-    public boolean addProductToCart(Product product) {
-        try {
-            if (cart.containsKey(product)) {
-                int numberOfProducts = cart.get(product);
-                cart.put(product, numberOfProducts + 1);
-            } else {
-                cart.put(product, 1);
-            }
-            amount = amount.add(product.getDefaultPrice());
-            return true;
-        } catch (Exception e) {
-            return false;
+    public void addProductToCart(Product product) {
+        if (cart.containsKey(product)) {
+            increasProductQuantity(product);
+        } else {
+            cart.put(product, 1);
         }
+        amount = amount.add(product.getDefaultPrice());
     }
 
-    public boolean removeProductFromCart(Product product) {
-        try {
-            cart.remove(product);
-            amount = amount.subtract(product.getDefaultPrice());
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void removeProductFromCart(Product product) {
+        cart.remove(product);
+        amount = amount.subtract(product.getDefaultPrice());
     }
 
-    public boolean decreaseProductQuantity(Product product) {
-        try {
-            if (cart.containsKey(product)) {
-                int numberOfProducts = cart.get(product);
-                if (numberOfProducts == 1) {
-                    removeProductFromCart(product);
-                } else {
-                    cart.put(product, numberOfProducts - 1);
-                }
-            }
-            amount = amount.subtract(product.getDefaultPrice());
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean increasProductQuantity(Product product) {
-        try {
+    public void decreaseProductQuantity(Product product) {
+        if (cart.containsKey(product)) {
             int numberOfProducts = cart.get(product);
-            cart.put(product, numberOfProducts + 1);
-            amount = amount.add(product.getDefaultPrice());
-            return true;
-        } catch (Exception e) {
-            return false;
+            if (numberOfProducts == 1) {
+                removeProductFromCart(product);
+            } else {
+                cart.put(product, numberOfProducts - 1);
+            }
         }
+        amount = amount.subtract(product.getDefaultPrice());
     }
 
+    public void increasProductQuantity(Product product) {
+        int numberOfProducts = cart.get(product);
+        cart.put(product, numberOfProducts + 1);
+        amount = amount.add(product.getDefaultPrice());
+    }
 
+    public Map<Product, Integer> getCart() {
+        return cart;
+    }
 }
