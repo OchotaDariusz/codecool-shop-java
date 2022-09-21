@@ -24,6 +24,7 @@ function fetchDataFromAPI() {
 
 function displayInfoInTable(data) {
     allInfo = data.allitems;
+
     //creating list
     console.log(data)
     const list = document.createElement("ul");
@@ -54,7 +55,6 @@ function displayInfoInTable(data) {
         price.classList.add("text-muted")
         list.appendChild(price)
 
-
         //populating the table with information
         let product_name = allInfo.name
         let product_description = allInfo.description
@@ -65,3 +65,5 @@ function displayInfoInTable(data) {
         price.textContent = product_price;
     }
 }
+
+displayWebsite();
