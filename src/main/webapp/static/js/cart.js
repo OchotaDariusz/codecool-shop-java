@@ -1,6 +1,8 @@
 const addToCartButtons = document.querySelectorAll(".add-to-cart");
 const numberOfProducts = document.querySelector("#number-of-products");
 const removeFromCartButtons = document.querySelectorAll(".remove-product");
+const increaseProductQuantityButtons = document.querySelectorAll(".increase-quantity");
+const decreaseProductQuantityButtons = document.querySelectorAll(".decrease-quantity");
 
 if (addToCartButtons && numberOfProducts) {
     addToCartButtons.forEach(addToCartButton => {
@@ -40,9 +42,48 @@ if (removeFromCartButtons) {
     });
 }
 
-
 async function removeProductFromCart(productId) {
     await fetch("/api/cart/remove", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"product_id": productId})
+    });
+}
+
+if (increaseProductQuantityButtons && decreaseProductQuantityButtons) {
+    increaseProductQuantityButtons.forEach(increaseProductQuantityButton => {
+        increaseProductQuantityButton.addEventListener("click", event => {
+            let productId = event.target.dataset.productId;
+            increaseProductAmount(productId).then(() => {
+                location.reload();
+            });
+        });
+    });
+
+    decreaseProductQuantityButtons.forEach(decreaseProductQuantityButton => {
+        decreaseProductQuantityButton.addEventListener("click", event => {
+            let productId = event.target.dataset.productId;
+            decreaseProductAmount(productId).then(() => {
+                location.reload();
+            });
+        });
+    });
+}
+
+async function increaseProductAmount(productId) {
+    await fetch("/api/cart/increase", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"product_id": productId})
+    });
+}
+
+async function decreaseProductAmount(productId) {
+    await fetch("/api/cart/decrease", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'

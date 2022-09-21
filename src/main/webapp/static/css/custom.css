@@ -61,6 +61,6 @@
     margin: 0 0 11px;
 }
 
-.remove-product {
+.remove-product, .increase-quantity, .decrease-quantity {
     cursor: pointer;
 }

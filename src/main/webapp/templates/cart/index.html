@@ -60,7 +60,7 @@
                 <td th:text="${product.getName()}">Laptop</td>
                 <td th:text="${product.getPriceAsString()}">200 USD</td>
                 <td th:text="${productsAmount.get(product)}">5</td>
-                <td><i class="fa-solid fa-plus"></i>&nbsp;<i class="fa-solid fa-minus"></i></td>
+                <td><i class="increase-quantity | fa-solid fa-plus" th:attr="data-product-id=${product.getId()}"></i>&nbsp;<i class="decrease-quantity | fa-solid fa-minus" th:attr="data-product-id=${product.getId()}"></i></td>
                 <td th:text="${product.getPrice()} * ${productsAmount.get(product)} + ' USD'">1000 USD</td>
             </tr>
             </tbody>
