@@ -30,6 +30,7 @@ public class OrderController extends HttpServlet {
 
         context.setVariable("products", order.getCart().keySet());
         context.setVariable("productsAmount", order.getCart());
+        context.setVariable("orderSum", order.getAmount());
 
 
         engine.process("cart/index.html", context, resp.getWriter());

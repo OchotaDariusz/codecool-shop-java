@@ -39,7 +39,7 @@
 </div>
 
 <div class="container">
-    <div class="card">
+    <div class="card text-center mb-3">
         <strong>Cart</strong>
     </div>
 
@@ -50,23 +50,31 @@
                 <th scope="col">#</th>
                 <th scope="col">Product</th>
                 <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col"></th>
-                <th scope="col">To pay</th>
+                <th scope="col" colspan="2">Quantity</th>
+                <th scope="col">Sum</th>
             </tr>
             </thead>
-            <tbody th:each="product: ${products}"> <!-- // TODO: loop over map -->
+            <tbody th:each="product: ${products}">
             <tr>
                 <th scope="row" th:attr="data-product-id=${product.getId()}"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
                 <td th:text="${product.getName()}">Laptop</td>
-                <td th:text="${product.getPrice()}">200 USD</td>
+                <td th:text="${product.getPriceAsString()}">200 USD</td>
                 <td th:text="${productsAmount.get(product)}">5</td>
                 <td><i class="fa-solid fa-plus"></i>&nbsp;<i class="fa-solid fa-minus"></i></td>
-                <td >1000 USD</td>
+                <td th:text="${product.getPrice()} * ${productsAmount.get(product)} + ' USD'">1000 USD</td>
             </tr>
-
             </tbody>
+            <tfoot>
+            <tr>
+                <th scope="row" colspan="5">Total:</th>
+                <td th:text="${orderSum} + ' USD'">SUM</td>
+            </tr>
+            </tfoot>
         </table>
+        <div class="d-flex justify-content-between mb-5">
+            <a href="/" class="btn btn-dark">Back</a>
+            <a href="/payment" class="btn btn-success">Go to payment</a>
+        </div>
 
 
     </div>
