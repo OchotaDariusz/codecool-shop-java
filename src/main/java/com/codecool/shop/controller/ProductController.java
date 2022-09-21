@@ -43,7 +43,6 @@ public class ProductController extends HttpServlet {
             Map<String, String> defaultCategory = new HashMap<>();
             defaultCategory.put("name", "All categories");
             context.setVariable("category", defaultCategory);
-            System.out.println(productService.getProductCategory(1));
             context.setVariable("products", productDataStore.getAll());
         } else if (category!=null && supplier==null){
             //context.setVariable("category name", productService.getProductCategory(Integer.parseInt(category)).getName());

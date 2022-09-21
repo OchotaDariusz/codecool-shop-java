@@ -14,6 +14,7 @@ public class Order extends BaseModel {
     private LocalDateTime date;
 
     public Order(int userId) {
+        this.amount = new BigDecimal(0);
         this.userId = userId;
         this.status = OrderStatus.ORDERED;
         this.date = LocalDateTime.now();

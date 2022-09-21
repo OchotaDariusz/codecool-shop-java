@@ -4,6 +4,7 @@ import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.model.Product;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -27,9 +28,9 @@ public class OrderController extends HttpServlet {
         OrderDao orderDataStore = OrderDaoMem.getInstance();
         Order order = orderDataStore.getOrderById(1);
 
-        System.out.println(order.getCart());
+        context.setVariable("products", order.getCart().keySet());
+        context.setVariable("productsAmount", order.getCart());
 
-        context.setVariable("products", order.getCart());
 
         engine.process("cart/index.html", context, resp.getWriter());
     }

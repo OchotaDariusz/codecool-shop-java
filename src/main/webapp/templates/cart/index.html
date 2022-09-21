@@ -57,11 +57,11 @@
             <tbody th:each="product: ${products}"> <!-- // TODO: loop over map -->
             <tr>
                 <th scope="row"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td th:text="${product}">Laptop</td>
-                <td th:text="${product}">200 USD</td>
-                <td th:text="${product}">5</td>
+                <td th:text="${product.getName()}">Laptop</td>
+                <td th:text="${product.getPrice()}">200 USD</td>
+                <td th:text="${productsAmount.get(product)}">5</td>
                 <td><i class="fa-solid fa-plus"></i>&nbsp;<i class="fa-solid fa-minus"></i></td>
-                <td>1000 USD</td>
+                <td >1000 USD</td>
             </tr>
 
             </tbody>
