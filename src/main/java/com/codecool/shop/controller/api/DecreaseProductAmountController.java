@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/api/cart/remove")
-public class RemoveProductController extends HttpServlet {
+@WebServlet(urlPatterns = "/api/cart/decrease")
+public class DecreaseProductAmountController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class RemoveProductController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         Product product = productDataStore.find(jsonObject.get("product_id").getAsInt());
 
-        order.removeProductFromCart(product);
+        order.decreaseProductQuantity(product);
 
     }
 

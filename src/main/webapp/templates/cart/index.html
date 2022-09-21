@@ -29,6 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/custom.css"/>
     <script src="https://kit.fontawesome.com/671f235a9d.js" crossorigin="anonymous"></script>
+    <script src="/static/js/cart.js" defer></script>
 </head>
 
 <body>
@@ -38,7 +39,7 @@
 </div>
 
 <div class="container">
-    <div class="card">
+    <div class="card text-center mb-3">
         <strong>Cart</strong>
     </div>
 
@@ -49,35 +50,31 @@
                 <th scope="col">#</th>
                 <th scope="col">Product</th>
                 <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">To pay</th>
+                <th scope="col" colspan="2">Quantity</th>
+                <th scope="col">Sum</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody th:each="product: ${products}">
             <tr>
-                <th scope="row"><i class="fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td>Laptop</td>
-                <td>200 USD</td>
-                <td>5 <i class="fa-solid fa-minus"></i> <i class="fa-solid fa-plus"></i></td>
-                <td>1000 USD</td>
+                <th scope="row" th:attr="data-product-id=${product.getId()}"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
+                <td th:text="${product.getName()}">Laptop</td>
+                <td th:text="${product.getPriceAsString()}">200 USD</td>
+                <td th:text="${productsAmount.get(product)}">5</td>
+                <td><i class="increase-quantity | fa-solid fa-plus" th:attr="data-product-id=${product.getId()}"></i>&nbsp;<i class="decrease-quantity | fa-solid fa-minus" th:attr="data-product-id=${product.getId()}"></i></td>
+                <td th:text="${product.getPrice()} * ${productsAmount.get(product)} + ' USD'">1000 USD</td>
             </tr>
-            <tr>
-                <th scope="row"><i class="fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td>Tablet</td>
-                <td>150 USD</td>
-                <td>2 <i class="fa-solid fa-minus"></i> <i class="fa-solid fa-plus"></td>
-                <td>300 USD</td>
-            </tr>
-            <tr>
-                <th scope="row"><i class="fa-sharp fa-solid fa-circle-xmark"></i></th>
-                <td>Desktop PC</td>
-                <td>50 USD</td>
-                <td>1 <i class="fa-solid fa-minus"></i> <i class="fa-solid fa-plus"></td>
-                <td>50 USD</td>
-            </tr>
-
             </tbody>
+            <tfoot>
+            <tr>
+                <th scope="row" colspan="5">Total:</th>
+                <td th:text="${orderSum} + ' USD'">SUM</td>
+            </tr>
+            </tfoot>
         </table>
+        <div class="d-flex justify-content-between mb-5">
+            <a href="/" class="btn btn-dark">Back</a>
+            <a href="/payment" class="btn btn-success">Go to payment</a>
+        </div>
 
 
     </div>

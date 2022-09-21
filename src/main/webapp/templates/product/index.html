@@ -40,9 +40,11 @@
 
 <div class="container">
     <div class="card">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <p id="number-of-products">0</p>
-        <strong id="category-name" th:text="${category.name}">Category</strong>
+        <a href="/cart" class="d-flex justify-content-end">
+        <p id="number-of-products" th:text="${amountOfProductsInCart}">0</p>
+            <i class="fa-solid fa-cart-shopping"></i>
+        </a>
+        <strong id="category-name" th:text="${category.name}" class="text-center">Category</strong>
     </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -59,7 +61,8 @@
                     </a>
                     <div class="dropdown-menu">
                         <div th:each="cat: ${categories}">
-                            <a class="dropdown-item category" href="#" th:attr="data-category=${cat.id}" th:text="${cat.name}">Category</a>
+                            <a class="dropdown-item category" href="#" th:attr="data-category=${cat.id}"
+                               th:text="${cat.name}">Category</a>
                         </div>
                     </div>
                 </li>
@@ -75,7 +78,8 @@
                     </a>
                     <div class="dropdown-menu">
                         <div th:each="sup: ${suppliers}">
-                            <a class="dropdown-item supplier" href="#" th:attr="data-category=${sup.id}" th:text="${sup.name}">Category</a>
+                            <a class="dropdown-item supplier" href="#" th:attr="data-category=${sup.id}"
+                               th:text="${sup.name}">Category</a>
                         </div>
                     </div>
                 </li>
@@ -96,10 +100,11 @@
                 </div>
                 <div class="card-body">
                     <div class="card-text">
-                        <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
+                        <p class="lead" th:text="${prod.getPriceAsString()}">100 USD</p>
                     </div>
                     <div class="card-text">
-                        <a class="add-to-cart | btn btn-success" href="#" th:attr="data-product-id=${prod.id}">Add to cart</a>
+                        <a class="add-to-cart | btn btn-success" href="#" th:attr="data-product-id=${prod.id}">Add to
+                            cart</a>
                     </div>
                 </div>
             </div>
