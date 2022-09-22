@@ -24,9 +24,6 @@ public interface ProductRequestInterface {
         // check if user have opened order if not create new one.
         // get user by user id from current session.
 
-        OrderDao orderDataStore = OrderDaoMem.getInstance();
-        Order order = orderDataStore.getOrderByUserId(1); // id zamowienia Tomka
-
         ProductDao productDataStore = ProductDaoMem.getInstance();
 
         return productDataStore.find(jsonObject.get("product_id").getAsInt());

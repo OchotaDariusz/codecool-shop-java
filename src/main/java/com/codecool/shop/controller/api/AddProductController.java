@@ -24,7 +24,9 @@ public class AddProductController extends HttpServlet implements ProductRequestI
 
         Product product = getRequestedProduct(req);
 
-        Order order = new Order(1);
+        OrderDao orderDataStore = OrderDaoMem.getInstance();
+        Order order = orderDataStore.getOrderByUserId(1); // id zamowienia Tomka
+
         order.addProductToCart(product);
 
     }
