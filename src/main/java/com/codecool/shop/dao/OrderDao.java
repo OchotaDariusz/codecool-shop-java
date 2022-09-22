@@ -5,7 +5,7 @@ import com.codecool.shop.model.Order;
 public interface OrderDao {
 
     void add(Order product);
-    Order getOrderById(int id);
+    Order getOrderByUserId(int id);
     void remove(int id);
 
 }

@@ -60,7 +60,7 @@ public class Initializer implements ServletContextListener {
         //setting up users
         userDataStore.add(new User("Tomek"));
 
-        //setting up test order
-        orderDataStore.add(new Order(1));
+//        //setting up test order
+//        orderDataStore.add(new Order(1));
     }
 }

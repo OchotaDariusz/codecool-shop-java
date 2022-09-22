@@ -20,7 +20,7 @@ public class Order extends BaseModel {
         this.date = LocalDateTime.now();
     }
 
-    private enum OrderStatus {
+    public enum OrderStatus {
         ORDERED,
         PAID,
         SHIPPED;
@@ -42,6 +42,9 @@ public class Order extends BaseModel {
 
     private Map<Product, Integer> cart = new HashMap<>();
 
+    public int getUserId() {
+        return userId;
+    }
 
     public void addProductToCart(Product product) {
         if (cart.containsKey(product)) {
