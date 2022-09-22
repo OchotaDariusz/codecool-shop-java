@@ -10,6 +10,8 @@ public class Order extends BaseModel {
     private BigDecimal amount;
     private OrderStatus status;
     private int userId;
+    private int itemsInCart;
+
 
     @Override
     public String toString() {
@@ -171,5 +173,12 @@ public class Order extends BaseModel {
 
     public Map<Product, Integer> getCart() {
         return cart;
+    }
+
+    public int getNumberOfItemsInCart() {
+        for (Integer num : cart.values()) {
+            itemsInCart += num;
+        }
+        return itemsInCart;
     }
 }
