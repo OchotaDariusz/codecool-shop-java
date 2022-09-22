@@ -80,9 +80,11 @@ public class ProductController extends HttpServlet {
         OrderDao orderDataStore = OrderDaoMem.getInstance();
         Order order = orderDataStore.getOrderByUserId(1);
         int amountOfProductsInCart = 0;
-        if (order.getCart().size() != 0) {
-            for (Product product : order.getCart().keySet()) {
-                amountOfProductsInCart += order.getCart().get(product);
+        if (order.getCart().size() != 0 ) {
+            if (order.getOrderStatus() != Order.OrderStatus.PAID && order.getOrderStatus() != Order.OrderStatus.SHIPPED) {
+                for (Product product : order.getCart().keySet()) {
+                    amountOfProductsInCart += order.getCart().get(product);
+                }
             }
         }
 
