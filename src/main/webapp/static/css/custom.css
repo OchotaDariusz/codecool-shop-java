@@ -65,7 +65,7 @@
     cursor: pointer;
 }
 
-.product-added-alert {
+.product-added-alert, .payment-complete {
     position: fixed;
     top: 90vh;
     z-index: 100;
