@@ -4,6 +4,8 @@ import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.model.Order;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 
 @WebServlet(urlPatterns = {"/payment"})
@@ -31,6 +34,7 @@ public class PaymentController extends HttpServlet {
         context.setVariable("products", order.getCart().keySet());
         context.setVariable("productsAmount", order.getCart());
         context.setVariable("orderSum", order.getAmount());
+        context.setVariable("numberOfProducts", order.getNumberOfItemsInCart());
 
         engine.process("payment/index.html", context, resp.getWriter());
 
@@ -42,28 +46,25 @@ public class PaymentController extends HttpServlet {
         OrderDao od = OrderDaoMem.getInstance();
         Order currentOrder = od.getOrderByUserId(1);
 
-        currentOrder.setFirstName(req.getParameter("firstName")); ;
-        currentOrder.setLastName(req.getParameter("lastName"));
-        currentOrder.setUserName(req.getParameter("username"));
-        currentOrder.setEmail(req.getParameter("email"));
-        currentOrder.setAddress(req.getParameter("address"));
-        currentOrder.setAddress2(req.getParameter("address2"));
-        currentOrder.setCountry(req.getParameter("country"));
-        currentOrder.setCity(req.getParameter("city"));
-        currentOrder.setZip(req.getParameter("zip"));
-        currentOrder.setCardName(req.getParameter("cc-name"));
-        currentOrder.setCardNumber(req.getParameter("cc-number"));
-        currentOrder.setCardExpiration(req.getParameter("cc-expiration"));
-        currentOrder.setCardCvv(req.getParameter("cc-cvv"));
+        String paymentInfo = req.getReader().readLine();
+        JsonObject jsonObject = new Gson().fromJson(paymentInfo, JsonObject.class);
+
+        currentOrder.setFirstName(jsonObject.get("firstName").getAsString());
+        currentOrder.setLastName(jsonObject.get("lastName").getAsString());
+        currentOrder.setUserName(jsonObject.get("username").getAsString());
+        currentOrder.setEmail(jsonObject.get("email").getAsString());
+        currentOrder.setAddress(jsonObject.get("address").getAsString());
+        currentOrder.setAddress2(jsonObject.get("address2").getAsString());
+        currentOrder.setCountry(jsonObject.get("country").getAsString());
+        currentOrder.setCity(jsonObject.get("city").getAsString());
+        currentOrder.setZip(jsonObject.get("zip").getAsString());
+        currentOrder.setCardName(jsonObject.get("ccname").getAsString());
+        currentOrder.setCardNumber(jsonObject.get("ccnumber").getAsString());
+        currentOrder.setCardExpiration(jsonObject.get("ccexpiration").getAsString());
+        currentOrder.setCardCvv(jsonObject.get("cccvv").getAsString());
         currentOrder.setOrderStatus(Order.OrderStatus.PAID);
 
-        System.out.println("POST request received");
-        System.out.println(currentOrder.toString());
-
-        PrintWriter out = resp.getWriter();
-        out.println("Thank you for your order!");
-
-
+        System.out.println(jsonObject.get("firstName").getAsString());
 
     }
 

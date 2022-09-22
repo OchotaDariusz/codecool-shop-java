@@ -1,69 +1,40 @@
-// const cart_container = document.querySelector('#cart-container')
-// const total_price = document.querySelector('#total-price')
-// const num_of_items = document.querySelector('#num-of-items')
-//
-// function displayWebsite() {
-//     console.log("JS script initialized")
-//     fetchDataFromAPI();
-// }
-//
-//
-// function fetchDataFromAPI() {
-//     fetch("/apiCurrentCart").then(function (response) {
-//         if (response.ok) {
-//             return response.json();
-//         } else {
-//             return Promise.reject(response);
-//         }
-//     }).then(function (data) {
-//         displayInfoInTable(data);
-//     }).catch(function (err) {
-//         console.warn('Something went wrong.', err);
-//     });
-// }
-//
-// function displayInfoInTable(data) {
-//     allInfo = data.allitems;
-//
-//     //creating list
-//     console.log(data)
-//     const list = document.createElement("ul");
-//     list.classList.add("list-group");
-//     list.classList.add("mb-3")
-//     cart_container.appendChild(list)
-//     for (const info of allInfo) {
-//
-//         //create list items
-//         const row = document.createElement("li");
-//         row.classList.add("list-group-item")
-//         row.classList.add("d-flex")
-//         row.classList.add("justify-content-between")
-//         row.classList.add("lh-condensed")
-//         list.appendChild(row)
-//         const div = document.createElement("div");
-//
-//         const productName = document.createElement("h6");
-//         productName.classList.add("m-0")
-//         div.appendChild(productName)
-//
-//         const description = document.createElement("small")
-//         description.classList.add("text-muted")
-//         div.appendChild(description)
-//         list.appendChild(div)
-//
-//         const price = document.createElement("span")
-//         price.classList.add("text-muted")
-//         list.appendChild(price)
-//
-//         //populating the table with information
-//         let product_name = allInfo.name
-//         let product_description = allInfo.description
-//         let product_price = allInfo.price
-//
-//         productName.textContent = product_name;
-//         description.textContent = product_description;
-//         price.textContent = product_price;
-//     }
-// }
-//
-// displayWebsite();
+const form = document.querySelector("form");
+
+form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const data = {
+        "firstName": form.firstName.value,
+        "lastName": form.lastName.value,
+        "username": form.username.value,
+        "email": form.email.value,
+        "address": form.address.value,
+        "address2": form.address2.value,
+        "country": form.country.value,
+        "city": form.city.value,
+        "zip": form.zip.value,
+        "ccname": form.ccname.value,
+        "ccnumber": form.ccnumber.value,
+        "ccexpiration": form.ccexpiration.value,
+        "cccvv": form.cccvv.value
+    };
+
+    fetch("/payment", { method: "POST", body: JSON.stringify(data) }).then(() => {
+        displaySuccessInfo();
+
+        // redirect after 3s to main page
+        setTimeout(() => {
+            location.href = "/";
+        }, 3000);
+    });
+});
+
+function displaySuccessInfo() {
+    document.querySelector(".payment-complete").innerHTML =
+        "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+        "    <strong>Thank you!</strong> Redirecting to main page...\n" +
+        "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+        "        <span aria-hidden=\"true\">&times;</span>\n" +
+        "    </button>\n" +
+        "</div>";
+}
