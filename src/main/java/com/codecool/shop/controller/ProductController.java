@@ -41,6 +41,7 @@ public class ProductController extends HttpServlet {
         String category = req.getParameter("category");
         String supplier = req.getParameter("supplier");
 
+
         //setup WebContext
         if(category==null && supplier==null){
             //context.setVariable("category_name", "All categories");
@@ -76,7 +77,7 @@ public class ProductController extends HttpServlet {
         // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
         // context.setVariables(params);
         OrderDao orderDataStore = OrderDaoMem.getInstance();
-        Order order = orderDataStore.getOrderById(1);
+        Order order = orderDataStore.getOrderByUserId(1);
         int amountOfProductsInCart = 0;
         if (order.getCart().size() != 0) {
             for (Product product : order.getCart().keySet()) {

@@ -32,7 +32,7 @@ public class RemoveProductController extends HttpServlet {
 
 
         OrderDao orderDataStore = OrderDaoMem.getInstance();
-        Order order = orderDataStore.getOrderById(1); // id zamowienia Tomka
+        Order order = orderDataStore.getOrderByUserId(1); // id zamowienia Tomka
 
         ProductDao productDataStore = ProductDaoMem.getInstance();
         Product product = productDataStore.find(jsonObject.get("product_id").getAsInt());

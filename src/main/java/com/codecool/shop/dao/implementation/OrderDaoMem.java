@@ -31,13 +31,18 @@ public class OrderDaoMem implements OrderDao {
     }
 
     @Override
-    public Order getOrderById(int id) {
-        return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    public Order getOrderByUserId(int userId) {
+        Order order = data.stream().filter(t -> t.getUserId() == userId).findFirst().orElse(null);
+        if (order == null || order.getOrderStatus() == Order.OrderStatus.PAID) {
+            order = new Order(userId);
+        }
+        add(order);
+        return order;
     }
 
     @Override
     public void remove(int id) {
-        data.remove(getOrderById(id));
+        data.remove(getOrderByUserId(id));
     }
 
 
