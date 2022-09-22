@@ -25,7 +25,7 @@ public class PaymentController extends HttpServlet {
 
 
         OrderDao orderDataStore = OrderDaoMem.getInstance();
-        Order order = orderDataStore.getOrderById(1);
+        Order order = orderDataStore.getOrderByUserId(1);
 
         context.setVariable("products", order.getCart().keySet());
         context.setVariable("productsAmount", order.getCart());
