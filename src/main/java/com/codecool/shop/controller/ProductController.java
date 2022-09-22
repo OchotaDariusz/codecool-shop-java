@@ -32,7 +32,7 @@ public class ProductController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -41,19 +41,20 @@ public class ProductController extends HttpServlet {
         String category = req.getParameter("category");
         String supplier = req.getParameter("supplier");
 
+        Map<String, String> defaultCategory = new HashMap<>();
+        defaultCategory.put("name", "All categories");
 
         //setup WebContext
-        if(category==null && supplier==null){
+        if (category == null && supplier == null) {
             //context.setVariable("category_name", "All categories");
-            Map<String, String> defaultCategory = new HashMap<>();
-            defaultCategory.put("name", "All categories");
             context.setVariable("category", defaultCategory);
             context.setVariable("products", productDataStore.getAll());
-        } else if (category!=null && supplier==null){
+        } else if (category != null && supplier == null) {
             //context.setVariable("category name", productService.getProductCategory(Integer.parseInt(category)).getName());
             context.setVariable("category", productService.getProductCategory(Integer.parseInt(category)));
             context.setVariable("products", productService.getProductsForCategory(Integer.parseInt(category)));
-        } else if (category==null && supplier!=null){
+        } else if (category == null && supplier != null) {
+            context.setVariable("category", defaultCategory);
             context.setVariable("supplier", productService.getSupplier(Integer.parseInt(supplier)));
             context.setVariable("products", productService.getProductsForSupplier(Integer.parseInt(supplier)));
         }
