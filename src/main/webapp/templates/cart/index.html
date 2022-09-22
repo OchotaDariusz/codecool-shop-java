@@ -54,8 +54,8 @@
                 <th scope="col">Sum</th>
             </tr>
             </thead>
-            <tbody th:each="product: ${products}">
-            <tr>
+            <tbody >
+            <tr th:each="product: ${products}">
                 <th scope="row" th:attr="data-product-id=${product.getId()}"><i class="remove-product | fa-sharp fa-solid fa-circle-xmark"></i></th>
                 <td th:text="${product.getName()}">Laptop</td>
                 <td th:text="${product.getPriceAsString()}">200 USD</td>
