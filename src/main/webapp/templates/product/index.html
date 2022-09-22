@@ -34,17 +34,22 @@
 
 <body>
 
-<div class="jumbotron text-center">
-    <h1>Codecool Shop</h1>
+<div class="jumbotron text-center bg-info shadow">
+    <h1><a href="/" class="text-decoration-none text-dark font-weight-bolder">Codecool Shop</a></h1>
 </div>
 
+<div class="product-added-alert"></div>
+
 <div class="container">
-    <div class="card">
-        <a href="/cart" class="d-flex justify-content-end">
-        <p id="number-of-products" th:text="${amountOfProductsInCart}">0</p>
-            <i class="fa-solid fa-cart-shopping"></i>
-        </a>
-        <strong id="category-name" th:text="${category.name}" class="text-center">Category</strong>
+    <div class="card mb-3 py-2">
+        <div class="d-flex justify-content-end">
+            <a href="/cart">
+                <span class="badge badge-pill badge-success" id="number-of-products"
+                      th:text="${amountOfProductsInCart}">0</span>
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+        </div>
+        <h3 id="category-name" th:text="${category.name}" class="text-center">Category</h3>
     </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -89,9 +94,9 @@
     <div class="card-text">
         <a id="removeFilters" href="#">Remove all filters</a>
     </div>
-    <div id="products" class="row">
+    <div id="products" class="row mt-5">
         <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${products}">
-            <div class="card">
+            <div class="card mb-3 shadow rounded">
                 <img class="" src="http://placehold.it/400x250/000/fff"
                      th:attr="src='/static/img/product_' + ${prod.id} + '.png'" alt=""/>
                 <div class="card-header">
@@ -104,7 +109,8 @@
                     </div>
                     <div class="card-text">
                         <button class="add-to-cart | btn btn-success" th:attr="data-product-id=${prod.id}">Add to
-                            cart</button>
+                            cart
+                        </button>
                     </div>
                 </div>
             </div>

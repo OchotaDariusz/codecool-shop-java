@@ -10,8 +10,15 @@ if (addToCartButtons && numberOfProducts) {
             let productId = event.target.dataset.productId;
             addProductToCart(productId).then(() => {
                 numberOfProducts.innerText = Number(numberOfProducts.innerText) + 1;
-            })
-        })
+                document.querySelector(".product-added-alert").innerHTML =
+                    "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+                    "    <strong>Success!</strong> Product has been added to your cart.\n" +
+                    "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+                    "        <span aria-hidden=\"true\">&times;</span>\n" +
+                    "    </button>\n" +
+                    "</div>";
+            });
+        });
     });
 }
 
