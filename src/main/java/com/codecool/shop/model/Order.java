@@ -11,7 +11,98 @@ public class Order extends BaseModel {
     private OrderStatus status;
     private int userId;
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "amount=" + amount +
+                ", status=" + status +
+                ", userId=" + userId +
+                ", date=" + date +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", zip='" + zip + '\'' +
+                ", cardName='" + cardName + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", cardExpiration='" + cardExpiration + '\'' +
+                ", cardCvv='" + cardCvv + '\'' +
+                ", cart=" + cart +
+                '}';
+    }
+
     private LocalDateTime date;
+
+    //storing payment data
+    private String firstName;
+    private String lastName;
+    private String userName;
+    private String email;
+    private String address;
+    private String address2;
+    private String country;
+    private String city;
+    private String zip;
+    private String cardName;
+    private String cardNumber;
+    private String cardExpiration;
+    private String cardCvv;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public void setCardExpiration(String cardExpiration) {
+        this.cardExpiration = cardExpiration;
+    }
+
+    public void setCardCvv(String cardCvv) {
+        this.cardCvv = cardCvv;
+    }
 
     public Order(int userId) {
         this.amount = new BigDecimal(0);
