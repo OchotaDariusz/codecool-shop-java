@@ -33,7 +33,7 @@ public class OrderDaoMem implements OrderDao {
     @Override
     public Order getOrderByUserId(int userId) {
         Order order = data.stream().filter(t -> t.getUserId() == userId).findFirst().orElse(null);
-        if (order == null || (order.getOrderStatus() == Order.OrderStatus.PAID && order.getOrderStatus() == Order.OrderStatus.SHIPPED)) {
+        if (order == null || order.getOrderStatus() == Order.OrderStatus.PAID || order.getOrderStatus() == Order.OrderStatus.SHIPPED) {
             order = new Order(userId);
         }
         add(order);
