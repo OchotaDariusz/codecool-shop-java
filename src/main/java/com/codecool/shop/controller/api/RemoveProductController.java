@@ -17,25 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = "/api/cart/remove")
-public class RemoveProductController extends HttpServlet {
+public class RemoveProductController extends HttpServlet implements ProductRequestInterface {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String productId = req.getReader().readLine();
-
-        JsonObject jsonObject = new Gson().fromJson(productId, JsonObject.class);
-
-        // get order object from order dao + call addProductToCart method on that object
-        // check if user have opened order if not create new one.
-        // get user by user id from current session.
-
+        Product product = getRequestedProduct(req);
 
         OrderDao orderDataStore = OrderDaoMem.getInstance();
         Order order = orderDataStore.getOrderByUserId(1); // id zamowienia Tomka
-
-        ProductDao productDataStore = ProductDaoMem.getInstance();
-        Product product = productDataStore.find(jsonObject.get("product_id").getAsInt());
 
         order.removeProductFromCart(product);
 
