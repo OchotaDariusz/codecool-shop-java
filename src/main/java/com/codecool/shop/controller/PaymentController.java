@@ -31,7 +31,7 @@ public class PaymentController extends HttpServlet {
         context.setVariable("productsAmount", order.getCart());
         context.setVariable("orderSum", order.getAmount());
 
-        engine.process("payment/payment.html", context, resp.getWriter());
+        engine.process("payment/index.html", context, resp.getWriter());
 
     }
 
