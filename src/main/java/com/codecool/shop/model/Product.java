@@ -35,7 +35,7 @@ public class Product extends BaseModel {
     }
 
     public String getPriceAsString() {
-        return String.valueOf(this.defaultPrice) + " " + this.defaultCurrency.toString();
+        return this.defaultPrice + " " + this.defaultCurrency.toString();
     }
 
     public BigDecimal getPrice() {

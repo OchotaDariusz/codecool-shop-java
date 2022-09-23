@@ -11,7 +11,29 @@ public class Order extends BaseModel {
     private OrderStatus status;
     private int userId;
     private int itemsInCart;
+    private LocalDateTime date;
+    //storing payment data
+    private String firstName;
+    private String lastName;
+    private String userName;
+    private String email;
+    private String address;
+    private String address2;
+    private String country;
+    private String city;
+    private String zip;
+    private String cardName;
+    private String cardNumber;
+    private String cardExpiration;
+    private String cardCvv;
+    private Map<Product, Integer> cart = new HashMap<>();
 
+    public Order(int userId) {
+        this.amount = new BigDecimal(0);
+        this.userId = userId;
+        this.status = OrderStatus.ORDERED;
+        this.date = LocalDateTime.now();
+    }
 
     @Override
     public String toString() {
@@ -36,23 +58,6 @@ public class Order extends BaseModel {
                 ", cart=" + cart +
                 '}';
     }
-
-    private LocalDateTime date;
-
-    //storing payment data
-    private String firstName;
-    private String lastName;
-    private String userName;
-    private String email;
-    private String address;
-    private String address2;
-    private String country;
-    private String city;
-    private String zip;
-    private String cardName;
-    private String cardNumber;
-    private String cardExpiration;
-    private String cardCvv;
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -106,20 +111,6 @@ public class Order extends BaseModel {
         this.cardCvv = cardCvv;
     }
 
-    public Order(int userId) {
-        this.amount = new BigDecimal(0);
-        this.userId = userId;
-        this.status = OrderStatus.ORDERED;
-        this.date = LocalDateTime.now();
-    }
-
-    public enum OrderStatus {
-        ORDERED,
-        PAID,
-        SHIPPED;
-
-    }
-
     public OrderStatus getOrderStatus() {
         return status;
     }
@@ -132,9 +123,6 @@ public class Order extends BaseModel {
         return amount;
     }
 
-
-    private Map<Product, Integer> cart = new HashMap<>();
-
     public int getUserId() {
         return userId;
     }
@@ -144,8 +132,8 @@ public class Order extends BaseModel {
             increasProductQuantity(product);
         } else {
             cart.put(product, 1);
+            amount = amount.add(product.getDefaultPrice());
         }
-        amount = amount.add(product.getDefaultPrice());
     }
 
     public void removeProductFromCart(Product product) {
@@ -160,9 +148,9 @@ public class Order extends BaseModel {
                 removeProductFromCart(product);
             } else {
                 cart.put(product, numberOfProducts - 1);
+                amount = amount.subtract(product.getDefaultPrice());
             }
         }
-        amount = amount.subtract(product.getDefaultPrice());
     }
 
     public void increasProductQuantity(Product product) {
@@ -180,5 +168,12 @@ public class Order extends BaseModel {
             itemsInCart += num;
         }
         return itemsInCart;
+    }
+
+    public enum OrderStatus {
+        ORDERED,
+        PAID,
+        SHIPPED;
+
     }
 }

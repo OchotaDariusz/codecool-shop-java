@@ -1,10 +1,7 @@
 package com.codecool.shop.controller.api;
 
-import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

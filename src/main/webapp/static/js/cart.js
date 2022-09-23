@@ -69,8 +69,8 @@ if (increaseProductQuantityButtons && decreaseProductQuantityButtons) {
         });
     });
 
-    decreaseProductQuantityButtons.forEach(decreaseProductQuantityButton => {
-        decreaseProductQuantityButton.addEventListener("click", event => {
+    decreaseProductQuantityButtons.forEach(button => {
+        button.addEventListener("click", event => {
             let productId = event.target.dataset.productId;
             decreaseProductAmount(productId).then(() => {
                 location.reload();

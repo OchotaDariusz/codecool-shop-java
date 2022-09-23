@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
@@ -11,7 +12,6 @@ import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.service.ProductService;
-import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -27,13 +27,38 @@ import java.util.Map;
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ProductDao productDataStore = ProductDaoMem.getInstance();
+    private final ProductDaoMem productDataStore;
+    ProductService productService;
+
+    public ProductController() {
+        this.productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
+        this.productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
+    }
 
+    private static void setupWebContext(ProductDao productDataStore, ProductService productService, WebContext context, String category, String supplier, Map<String, String> defaultCategory) {
+        if (category == null && supplier == null) {
+            context.setVariable("category", defaultCategory);
+            context.setVariable("products", productDataStore.getAll());
+        } else if (category != null && supplier == null) {
+            context.setVariable("category", productService.getProductCategory(Integer.parseInt(category)));
+            context.setVariable("products", productService.getProductsForCategory(Integer.parseInt(category)));
+        } else if (category == null && supplier != null) {
+            context.setVariable("category", defaultCategory);
+            context.setVariable("supplier", productService.getSupplier(Integer.parseInt(supplier)));
+            context.setVariable("products", productService.getProductsForSupplier(Integer.parseInt(supplier)));
+        }
+        context.setVariable("categories", productService.getAllCategories());
+        context.setVariable("suppliers", productService.getAllSuppliers());
+    }
+
+    private static boolean cartIsNotEmptyAndModifiable(Order order) {
+        return order.getCart().size() != 0 && order.getOrderStatus() == Order.OrderStatus.ORDERED;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
@@ -44,47 +69,14 @@ public class ProductController extends HttpServlet {
         Map<String, String> defaultCategory = new HashMap<>();
         defaultCategory.put("name", "All categories");
 
-        //setup WebContext
-        if (category == null && supplier == null) {
-            //context.setVariable("category_name", "All categories");
-            context.setVariable("category", defaultCategory);
-            context.setVariable("products", productDataStore.getAll());
-        } else if (category != null && supplier == null) {
-            //context.setVariable("category name", productService.getProductCategory(Integer.parseInt(category)).getName());
-            context.setVariable("category", productService.getProductCategory(Integer.parseInt(category)));
-            context.setVariable("products", productService.getProductsForCategory(Integer.parseInt(category)));
-        } else if (category == null && supplier != null) {
-            context.setVariable("category", defaultCategory);
-            context.setVariable("supplier", productService.getSupplier(Integer.parseInt(supplier)));
-            context.setVariable("products", productService.getProductsForSupplier(Integer.parseInt(supplier)));
-        }
-        context.setVariable("categories", productService.getAllCategories());
-        context.setVariable("suppliers", productService.getAllSuppliers());
-        /*
-        if(supplier==null){
-            supplier = "0";
-        }
-        */
-
-
-        /*
-        context.setVariable("category", productService.getProductCategory(1));
-        context.setVariable("products", productService.getProductsForCategory(1));
-        context.setVariable("categories", productService.getAllCategories());
-         */
-        // // Alternative setting of the template context
-        // Map<String, Object> params = new HashMap<>();
-        // params.put("category", productCategoryDataStore.find(1));
-        // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
-        // context.setVariables(params);
+        setupWebContext(productDataStore, productService, context, category, supplier, defaultCategory);
         OrderDao orderDataStore = OrderDaoMem.getInstance();
+
         Order order = orderDataStore.getOrderByUserId(1);
         int amountOfProductsInCart = 0;
-        if (order.getCart().size() != 0 ) {
-            if (order.getOrderStatus() != Order.OrderStatus.PAID && order.getOrderStatus() != Order.OrderStatus.SHIPPED) {
-                for (Product product : order.getCart().keySet()) {
-                    amountOfProductsInCart += order.getCart().get(product);
-                }
+        if (cartIsNotEmptyAndModifiable(order)) {
+            for (Product product : order.getCart().keySet()) {
+                amountOfProductsInCart += order.getCart().get(product);
             }
         }
 

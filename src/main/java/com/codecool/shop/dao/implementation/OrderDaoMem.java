@@ -9,8 +9,8 @@ import java.util.List;
 
 public class OrderDaoMem implements OrderDao {
 
-    private List<Order> data = new ArrayList<>();
     private static OrderDaoMem instance = null;
+    private List<Order> data = new ArrayList<>();
 
     /* A private Constructor prevents any other class from instantiating.
      */
@@ -32,11 +32,15 @@ public class OrderDaoMem implements OrderDao {
 
     @Override
     public Order getOrderByUserId(int userId) {
-        Order order = data.stream().filter(t -> t.getUserId() == userId).findFirst().orElse(null);
-        if (order == null || order.getOrderStatus() == Order.OrderStatus.PAID || order.getOrderStatus() == Order.OrderStatus.SHIPPED) {
+        Order order = data.stream()
+                .filter(o -> o.getUserId() == userId)
+                .filter(o -> o.getOrderStatus() == Order.OrderStatus.ORDERED)
+                .findFirst()
+                .orElse(null);
+        if (order == null) {
             order = new Order(userId);
+            add(order);
         }
-        add(order);
         return order;
     }
 
