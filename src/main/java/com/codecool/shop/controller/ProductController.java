@@ -1,88 +1,107 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
-import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
-import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
+import com.codecool.shop.model.Supplier;
+import com.codecool.shop.service.OrderService;
 import com.codecool.shop.service.ProductService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
-
-    private final ProductDaoMem productDataStore;
-    ProductService productService;
+    private Order order;
+    private final ProductDao PRODUCT_DATA_STORE;
+    private final ProductService PRODUCT_SERVICE;
 
     public ProductController() {
-        this.productDataStore = ProductDaoMem.getInstance();
-        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        this.productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
+        this.PRODUCT_DATA_STORE = ProductDaoMem.getInstance();
+        this.PRODUCT_SERVICE = new ProductService(
+                PRODUCT_DATA_STORE,
+                ProductCategoryDaoMem.getInstance(),
+                SupplierDaoMem.getInstance()
+        );
     }
 
-    private static void setupWebContext(ProductDao productDataStore, ProductService productService, WebContext context, String category, String supplier, Map<String, String> defaultCategory) {
-        if (category == null && supplier == null) {
-            context.setVariable("category", defaultCategory);
-            context.setVariable("products", productDataStore.getAll());
-        } else if (category != null && supplier == null) {
-            context.setVariable("category", productService.getProductCategory(Integer.parseInt(category)));
-            context.setVariable("products", productService.getProductsForCategory(Integer.parseInt(category)));
-        } else if (category == null && supplier != null) {
-            context.setVariable("category", defaultCategory);
-            context.setVariable("supplier", productService.getSupplier(Integer.parseInt(supplier)));
-            context.setVariable("products", productService.getProductsForSupplier(Integer.parseInt(supplier)));
-        }
-        context.setVariable("categories", productService.getAllCategories());
-        context.setVariable("suppliers", productService.getAllSuppliers());
-    }
-
-    private static boolean cartIsNotEmptyAndModifiable(Order order) {
-        return order.getCart().size() != 0 && order.getOrderStatus() == Order.OrderStatus.ORDERED;
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-
-        //get chosen category/supplier from url parameters
+    private WebContext setupWebContext(HttpServletRequest req, HttpServletResponse resp) {
         String category = req.getParameter("category");
         String supplier = req.getParameter("supplier");
-
         Map<String, String> defaultCategory = new HashMap<>();
         defaultCategory.put("name", "All categories");
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+        if (category == null && supplier == null) {
+            setupContextVariables(
+                    context,
+                    defaultCategory,
+                    null,
+                    this.PRODUCT_DATA_STORE.getAll()
+            );
+        } else if (category != null && supplier == null) {
+            setupContextVariables(
+                    context,
+                    this.PRODUCT_SERVICE.getProductCategory(Integer.parseInt(category)),
+                    null,
+                    this.PRODUCT_SERVICE.getProductsForCategory(Integer.parseInt(category))
+            );
+        } else if (category == null && supplier != null) {
+            setupContextVariables(
+                    context,
+                    defaultCategory,
+                    this.PRODUCT_SERVICE.getSupplier(Integer.parseInt(supplier)),
+                    this.PRODUCT_SERVICE.getProductsForSupplier(Integer.parseInt(supplier))
+            );
+        }
+        return context;
+    }
 
-        setupWebContext(productDataStore, productService, context, category, supplier, defaultCategory);
-        OrderDao orderDataStore = OrderDaoMem.getInstance();
+    private void setupContextVariables(WebContext context, Object category, Supplier supplier, List<Product> products) {
+        context.setVariable("category", category);
+        context.setVariable("supplier", supplier);
+        context.setVariable("products", products);
+        context.setVariable("categories", this.PRODUCT_SERVICE.getAllCategories());
+        context.setVariable("suppliers", this.PRODUCT_SERVICE.getAllSuppliers());
+        context.setVariable("amountOfProductsInCart", getAmountOfProductsInCart());
+    }
 
-        Order order = orderDataStore.getOrderByUserId(1);
+    private int getAmountOfProductsInCart() {
         int amountOfProductsInCart = 0;
-        if (cartIsNotEmptyAndModifiable(order)) {
+        if (cartIsNotEmptyAndOrderExists(order)) {
             for (Product product : order.getCart().keySet()) {
                 amountOfProductsInCart += order.getCart().get(product);
             }
         }
-
-        context.setVariable("amountOfProductsInCart", amountOfProductsInCart);
-
-        engine.process("product/index.html", context, resp.getWriter());
+        return amountOfProductsInCart;
     }
+
+    private static boolean cartIsNotEmptyAndOrderExists(Order order) {
+        return order.getCart().size() != 0 && order.getOrderStatus() == Order.OrderStatus.NEW;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            this.order = new OrderService().getOrderByUserId(1);
+
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            engine.process("product/index.html", setupWebContext(req, resp), resp.getWriter());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

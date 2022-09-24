@@ -1,71 +1,69 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
-import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.service.OrderService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
 
 
 @WebServlet(urlPatterns = {"/payment"})
 public class PaymentController extends HttpServlet {
+    private Order order;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            this.order = new OrderService().getOrderByUserId(1);
 
-
-        OrderDao orderDataStore = OrderDaoMem.getInstance();
-        Order order = orderDataStore.getOrderByUserId(1);
-
-        context.setVariable("products", order.getCart().keySet());
-        context.setVariable("productsAmount", order.getCart());
-        context.setVariable("orderSum", order.getAmount());
-        context.setVariable("numberOfProducts", order.getNumberOfItemsInCart());
-
-        engine.process("payment/index.html", context, resp.getWriter());
-
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            fillOrderDetails(new Gson().fromJson(req.getReader().readLine(), JsonObject.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        OrderDao od = OrderDaoMem.getInstance();
-        Order currentOrder = od.getOrderByUserId(1);
+    private void fillOrderDetails(JsonObject jsonObject) {
+        this.order.setFirstName(jsonObject.get("firstName").getAsString());
+        this.order.setLastName(jsonObject.get("lastName").getAsString());
+        this.order.setUserName(jsonObject.get("username").getAsString());
+        this.order.setEmail(jsonObject.get("email").getAsString());
+        this.order.setAddress(jsonObject.get("address").getAsString());
+        this.order.setAddress2(jsonObject.get("address2").getAsString());
+        this.order.setCountry(jsonObject.get("country").getAsString());
+        this.order.setCity(jsonObject.get("city").getAsString());
+        this.order.setZip(jsonObject.get("zip").getAsString());
+        this.order.setCardName(jsonObject.get("ccname").getAsString());
+        this.order.setCardNumber(jsonObject.get("ccnumber").getAsString());
+        this.order.setCardExpiration(jsonObject.get("ccexpiration").getAsString());
+        this.order.setCardCvv(jsonObject.get("cccvv").getAsString());
+        this.order.setOrderStatus(Order.OrderStatus.PAID);
+    }
 
-        String paymentInfo = req.getReader().readLine();
-        JsonObject jsonObject = new Gson().fromJson(paymentInfo, JsonObject.class);
-
-        currentOrder.setFirstName(jsonObject.get("firstName").getAsString());
-        currentOrder.setLastName(jsonObject.get("lastName").getAsString());
-        currentOrder.setUserName(jsonObject.get("username").getAsString());
-        currentOrder.setEmail(jsonObject.get("email").getAsString());
-        currentOrder.setAddress(jsonObject.get("address").getAsString());
-        currentOrder.setAddress2(jsonObject.get("address2").getAsString());
-        currentOrder.setCountry(jsonObject.get("country").getAsString());
-        currentOrder.setCity(jsonObject.get("city").getAsString());
-        currentOrder.setZip(jsonObject.get("zip").getAsString());
-        currentOrder.setCardName(jsonObject.get("ccname").getAsString());
-        currentOrder.setCardNumber(jsonObject.get("ccnumber").getAsString());
-        currentOrder.setCardExpiration(jsonObject.get("ccexpiration").getAsString());
-        currentOrder.setCardCvv(jsonObject.get("cccvv").getAsString());
-        currentOrder.setOrderStatus(Order.OrderStatus.PAID);
-
-        System.out.println(jsonObject.get("firstName").getAsString());
-
+    private WebContext initContext(HttpServletRequest req, HttpServletResponse resp) {
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+        context.setVariable("products", this.order.getCart().keySet());
+        context.setVariable("productsAmount", this.order.getCart());
+        context.setVariable("orderSum", this.order.getAmount());
+        context.setVariable("numberOfProducts", this.order.getNumberOfItemsInCart());
+        return context;
     }
 
 }

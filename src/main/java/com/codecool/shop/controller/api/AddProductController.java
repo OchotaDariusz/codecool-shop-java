@@ -1,11 +1,7 @@
 package com.codecool.shop.controller.api;
 
-import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.dao.implementation.OrderDaoMem;
-import com.codecool.shop.model.Order;
-import com.codecool.shop.model.Product;
+import com.codecool.shop.service.OrderService;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +12,12 @@ import java.io.IOException;
 public class AddProductController extends HttpServlet implements ProductRequestInterface {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Product product = getRequestedProduct(req);
-
-        OrderDao orderDataStore = OrderDaoMem.getInstance();
-        Order order = orderDataStore.getOrderByUserId(1); // id zamowienia Tomka
-
-        order.addProductToCart(product);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            new OrderService().getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

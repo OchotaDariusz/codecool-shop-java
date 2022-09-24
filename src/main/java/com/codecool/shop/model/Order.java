@@ -31,7 +31,7 @@ public class Order extends BaseModel {
     public Order(int userId) {
         this.amount = new BigDecimal(0);
         this.userId = userId;
-        this.status = OrderStatus.ORDERED;
+        this.status = OrderStatus.NEW;
         this.date = LocalDateTime.now();
     }
 
@@ -129,7 +129,7 @@ public class Order extends BaseModel {
 
     public void addProductToCart(Product product) {
         if (cart.containsKey(product)) {
-            increasProductQuantity(product);
+            increaseProductQuantity(product);
         } else {
             cart.put(product, 1);
             amount = amount.add(product.getDefaultPrice());
@@ -153,7 +153,7 @@ public class Order extends BaseModel {
         }
     }
 
-    public void increasProductQuantity(Product product) {
+    public void increaseProductQuantity(Product product) {
         int numberOfProducts = cart.get(product);
         cart.put(product, numberOfProducts + 1);
         amount = amount.add(product.getDefaultPrice());
@@ -171,7 +171,7 @@ public class Order extends BaseModel {
     }
 
     public enum OrderStatus {
-        ORDERED,
+        NEW,
         PAID,
         SHIPPED;
 

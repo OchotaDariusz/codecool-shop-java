@@ -10,7 +10,6 @@ public class Payment extends BaseModel {
     private boolean isPaid;
     private PaymentMethod paymentMethod;
 
-
     public Payment(Currency currency, BigDecimal amountToPay) {
         this.currency = currency;
         this.amountToPay = amountToPay;
