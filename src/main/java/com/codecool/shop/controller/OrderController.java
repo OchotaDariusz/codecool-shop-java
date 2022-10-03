@@ -17,21 +17,17 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/cart")
 public class OrderController extends HttpServlet {
     private Order order;
-    private OrderDao orderDao;
+    private final OrderDao ORDER_DATA_STORE;
 
-    public OrderController(OrderDao orderDao){
-        this.orderDao = orderDao;
-    }
 
     public OrderController(){
-        this.orderDao = Initializer.orderDataStore;
+        this.ORDER_DATA_STORE = Initializer.orderDataStore;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            this.order = new OrderService(orderDao).getOrderByUserId(1);
-
+            this.order = new OrderService(ORDER_DATA_STORE).getOrderByUserId(1);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("cart/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {

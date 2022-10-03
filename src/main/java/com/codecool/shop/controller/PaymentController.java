@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.config.Initializer;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
@@ -19,17 +20,17 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {"/payment"})
 public class PaymentController extends HttpServlet {
     private Order order;
-    private OrderDao orderDao;
-
-    public PaymentController(Order order, OrderDao orderDao){
-        this.order = order;
-        this.orderDao = orderDao;
+    private final OrderDao ORDER_DATA_STORE;
+    
+    
+    public PaymentController(){
+        this.ORDER_DATA_STORE = Initializer.orderDataStore;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            this.order = new OrderService(orderDao).getOrderByUserId(1);
+            this.order = new OrderService(ORDER_DATA_STORE).getOrderByUserId(1);
 
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
