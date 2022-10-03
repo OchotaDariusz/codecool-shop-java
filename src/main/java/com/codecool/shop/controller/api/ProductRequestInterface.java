@@ -1,5 +1,6 @@
 package com.codecool.shop.controller.api;
 
+import com.codecool.shop.config.Initializer;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.model.Product;
@@ -16,8 +17,7 @@ public interface ProductRequestInterface {
         String productId = req.getReader().readLine();
         JsonObject jsonObject = new Gson().fromJson(productId, JsonObject.class);
 
-        ProductDao productDataStore = ProductDaoMem.getInstance();
-        return productDataStore.find(jsonObject.get("product_id").getAsInt());
+        return Initializer.productDataStore.find(jsonObject.get("product_id").getAsInt());
     }
 
 }

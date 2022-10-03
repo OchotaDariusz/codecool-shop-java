@@ -7,8 +7,8 @@ import com.codecool.shop.model.User;
 public class UserService {
     private UserDao userDao;
 
-    public UserService() {
-        this.userDao = UserDaoMem.getInstance();
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public User getUserById(int id) {

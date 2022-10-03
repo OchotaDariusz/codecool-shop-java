@@ -1,10 +1,10 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
@@ -27,14 +27,15 @@ public class ProductController extends HttpServlet {
     private Order order;
     private final ProductDao PRODUCT_DATA_STORE;
     private final ProductService PRODUCT_SERVICE;
+    private final OrderDao ORDER_DAO;
 
-    public ProductController() {
-        this.PRODUCT_DATA_STORE = ProductDaoMem.getInstance();
+    public ProductController(ProductDao productDao, ProductCategoryDao productCategoryDao, SupplierDao supplierDao, OrderDao order_dao) {
+        this.PRODUCT_DATA_STORE = productDao;
+        this.ORDER_DAO = order_dao;
         this.PRODUCT_SERVICE = new ProductService(
                 PRODUCT_DATA_STORE,
-                ProductCategoryDaoMem.getInstance(),
-                SupplierDaoMem.getInstance()
-        );
+                productCategoryDao,
+                supplierDao);
     }
 
     private WebContext setupWebContext(HttpServletRequest req, HttpServletResponse resp) {
@@ -94,7 +95,7 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            this.order = new OrderService().getOrderByUserId(1);
+            this.order = new OrderService(ORDER_DAO).getOrderByUserId(1);
 
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("product/index.html", setupWebContext(req, resp), resp.getWriter());

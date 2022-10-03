@@ -1,5 +1,6 @@
 package com.codecool.shop.controller.api;
 
+import com.codecool.shop.config.Initializer;
 import com.codecool.shop.service.OrderService;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ public class IncreaseProductAmountController extends HttpServlet implements Prod
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            new OrderService().getOrderByUserId(1).increaseProductQuantity(getRequestedProduct(req));
+            new OrderService(Initializer.orderDataStore).getOrderByUserId(1).increaseProductQuantity(getRequestedProduct(req));
         } catch (IOException e) {
             e.printStackTrace();
         }
