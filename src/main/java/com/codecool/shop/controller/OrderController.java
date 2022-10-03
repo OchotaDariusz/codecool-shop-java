@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.config.Initializer;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
@@ -20,6 +21,10 @@ public class OrderController extends HttpServlet {
 
     public OrderController(OrderDao orderDao){
         this.orderDao = orderDao;
+    }
+
+    public OrderController(){
+        this.orderDao = Initializer.orderDataStore;
     }
 
     @Override

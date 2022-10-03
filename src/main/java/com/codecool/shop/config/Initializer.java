@@ -16,14 +16,17 @@ public class Initializer implements ServletContextListener {
 
     public static OrderDao orderDataStore;
     public static ProductDao productDataStore;
+    public static ProductCategoryDao productCategoryDataStore;
+    public static SupplierDao supplierDataStore;
+    public static UserDao userDataStore;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         productDataStore = new ProductDaoMem();
-        ProductCategoryDao productCategoryDataStore = new ProductCategoryDaoMem();
-        SupplierDao supplierDataStore = new SupplierDaoMem();
+        productCategoryDataStore = new ProductCategoryDaoMem();
+        supplierDataStore = new SupplierDaoMem();
         orderDataStore = new OrderDaoMem();
-        UserDao userDataStore = new UserDaoMem();
+        userDataStore = new UserDaoMem();
 
         //setting up a new supplier
         Supplier amazon = new Supplier("Amazon", "Digital content and services");
