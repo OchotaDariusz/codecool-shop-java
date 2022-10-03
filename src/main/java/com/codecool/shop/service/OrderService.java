@@ -7,8 +7,8 @@ import com.codecool.shop.model.Order;
 public class OrderService {
     private OrderDao orderDao;
 
-    public OrderService() {
-        this.orderDao = OrderDaoMem.getInstance();
+    public OrderService(OrderDao orderDao) {
+        this.orderDao = orderDao;
     }
 
     public Order getOrderByUserId(int userId) {

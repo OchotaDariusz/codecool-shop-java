@@ -1,6 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.service.OrderService;
 import org.thymeleaf.TemplateEngine;
@@ -15,11 +16,16 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/cart")
 public class OrderController extends HttpServlet {
     private Order order;
+    private OrderDao orderDao;
+
+    public OrderController(OrderDao orderDao){
+        this.orderDao = orderDao;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            this.order = new OrderService().getOrderByUserId(1);
+            this.order = new OrderService(orderDao).getOrderByUserId(1);
 
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("cart/index.html", initContext(req, resp), resp.getWriter());
