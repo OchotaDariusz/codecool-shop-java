@@ -13,7 +13,7 @@ public class Product extends BaseModel {
 
     public Product(String name, BigDecimal defaultPrice, String currencyString, String description, ProductCategory productCategory, Supplier supplier) {
         super(name, description);
-        this.setPrice(defaultPrice, currencyString);
+        this.setDefaultPrice(defaultPrice);
         this.setSupplier(supplier);
         this.setProductCategory(productCategory);
     }
@@ -36,15 +36,6 @@ public class Product extends BaseModel {
 
     public String getPriceAsString() {
         return this.defaultPrice + " " + this.defaultCurrency.toString();
-    }
-
-    public BigDecimal getPrice() {
-        return this.defaultPrice;
-    }
-
-    public void setPrice(BigDecimal price, String currency) {
-        this.defaultPrice = price;
-        this.defaultCurrency = Currency.getInstance(currency);
     }
 
     public ProductCategory getProductCategory() {
