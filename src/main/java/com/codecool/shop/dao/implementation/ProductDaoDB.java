@@ -33,7 +33,23 @@ public class ProductDaoDB implements ProductDao {
         Supplier supplier = null;
         try (Connection conn = dataSource.getConnection()) {
             //create sql statement to retrieve all data necessary to create Product object
-            String sql = "SELECT ... FROM ... WHERE id = ?";
+            String sql = """
+            SELECT  p.name,\s
+                            p.price,\s
+                            p.currency,
+                            p.description,
+            				p_c.name,
+                            p_c.department,
+                            p_c.description,
+            				s.name,
+                            s.description \s
+                    FROM products AS p
+            		LEFT JOIN product_categories AS p_c
+                    ON p.category_id = p_c.id
+            		LEFT JOIN suppliers AS s
+                    ON p.supplier_id = s.id
+                    WHERE p.id = 1;
+            """;
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
