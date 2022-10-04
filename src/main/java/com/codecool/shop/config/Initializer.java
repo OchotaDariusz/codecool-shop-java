@@ -14,13 +14,19 @@ import java.math.BigDecimal;
 @WebListener
 public class Initializer implements ServletContextListener {
 
+    public static OrderDao orderDataStore;
+    public static ProductDao productDataStore;
+    public static ProductCategoryDao productCategoryDataStore;
+    public static SupplierDao supplierDataStore;
+    public static UserDao userDataStore;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        ProductDao productDataStore = ProductDaoMem.getInstance();
-        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        OrderDao orderDataStore = OrderDaoMem.getInstance();
-        UserDao userDataStore = UserDaoMem.getInstance();
+        productDataStore = new ProductDaoMem();
+        productCategoryDataStore = new ProductCategoryDaoMem();
+        supplierDataStore = new SupplierDaoMem();
+        orderDataStore = new OrderDaoMem();
+        userDataStore = new UserDaoMem();
 
         //setting up a new supplier
         Supplier amazon = new Supplier("Amazon", "Digital content and services");
