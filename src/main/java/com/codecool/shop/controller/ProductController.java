@@ -1,10 +1,11 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.config.Initializer;
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
@@ -27,15 +28,27 @@ public class ProductController extends HttpServlet {
     private Order order;
     private final ProductDao PRODUCT_DATA_STORE;
     private final ProductService PRODUCT_SERVICE;
+    private final OrderDao ORDER_DATA_STORE;
 
-    public ProductController() {
-        this.PRODUCT_DATA_STORE = ProductDaoMem.getInstance();
+
+    public ProductController(ProductDao productDao, ProductCategoryDao productCategoryDao, SupplierDao supplierDao, OrderDao orderDao) {
+        this.PRODUCT_DATA_STORE = productDao;
+        this.ORDER_DATA_STORE = orderDao;
         this.PRODUCT_SERVICE = new ProductService(
                 PRODUCT_DATA_STORE,
-                ProductCategoryDaoMem.getInstance(),
-                SupplierDaoMem.getInstance()
-        );
+                productCategoryDao,
+                supplierDao);
     }
+
+    public ProductController(){
+        this.PRODUCT_DATA_STORE = Initializer.productDataStore;
+        this.ORDER_DATA_STORE = Initializer.orderDataStore;
+        this.PRODUCT_SERVICE = new ProductService(
+                PRODUCT_DATA_STORE,
+                Initializer.productCategoryDataStore,
+                Initializer.supplierDataStore);
+    }
+
 
     private WebContext setupWebContext(HttpServletRequest req, HttpServletResponse resp) {
         String category = req.getParameter("category");
@@ -94,7 +107,7 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            this.order = new OrderService().getOrderByUserId(1);
+            this.order = new OrderService(ORDER_DATA_STORE).getOrderByUserId(1);
 
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("product/index.html", setupWebContext(req, resp), resp.getWriter());
