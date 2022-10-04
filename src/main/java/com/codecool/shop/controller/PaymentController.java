@@ -20,17 +20,17 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {"/payment"})
 public class PaymentController extends HttpServlet {
     private Order order;
-    private final OrderDao ORDER_DATA_STORE;
+    private final OrderDao orderDao;
     
     
     public PaymentController(){
-        this.ORDER_DATA_STORE = Initializer.orderDataStore;
+        this.orderDao = Initializer.orderDataStore;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            this.order = new OrderService(ORDER_DATA_STORE).getOrderByUserId(1);
+            this.order = new OrderService(orderDao).getOrderByUserId(1);
 
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
