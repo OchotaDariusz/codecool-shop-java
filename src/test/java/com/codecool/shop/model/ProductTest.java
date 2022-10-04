@@ -83,13 +83,36 @@ class ProductTest {
     @Test
     public void test_setProductCategory() {
         Supplier supplierMock = mock(Supplier.class);
-        ProductCategory productCategoryMock = mock(ProductCategory.class);
-        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", productCategoryMock, supplierMock);
-        BigDecimal newBig = new BigDecimal("7");
-        product.setPrice(newBig, "EUR");
+        ProductCategory oldProductCategory = new ProductCategory("phone", "Hardware","No desc.");
+        ProductCategory newProductCategory = new ProductCategory("laptop", "Hardware","No desc.");
+        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", oldProductCategory, supplierMock);
+
+        // Assert old category
+        assertEquals(product.getProductCategory().getName(), "phone");
+        // Assert new category
+        product.setProductCategory(newProductCategory);
+        assertEquals(product.getProductCategory().getName(), "laptop");
     }
 
+    @Test
+    public void test_getSupplier() {
+        Supplier supplier = new Supplier("Asus", "Crap.");
+        ProductCategory productCategoryMock = mock(ProductCategory.class);
+        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", productCategoryMock, supplier);
+        assertEquals(product.getSupplier().getName(), "Asus");
+    }
 
+    @Test
+    void test_setSupplier() {
+        Supplier oldSupplier = new Supplier("Asus", "Crap");
+        Supplier newSupplier = new Supplier("Lenovo", "Another crap");
+        ProductCategory productCategoryMock = mock(ProductCategory.class);
+        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", productCategoryMock, oldSupplier);
 
-
+        // Assert old supplier
+        assertEquals(product.getSupplier().getName(), "Asus");
+        // Assert new supplier
+        product.setSupplier(newSupplier);
+        assertEquals(product.getSupplier().getName(), "Lenovo");
+    }
 }
