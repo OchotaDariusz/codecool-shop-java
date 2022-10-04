@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS users;
 
 
 CREATE TABLE products (
-                          id          INTEGER     PRIMARY KEY     NOT NULL,
+                          id          SERIAL    PRIMARY KEY     NOT NULL,
                           name        VARCHAR(200)                NOT NULL,
                           price       BIGINT                      NOT NULL,
                           currency    TEXT,
