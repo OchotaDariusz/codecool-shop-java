@@ -70,7 +70,15 @@ public class ProductDaoDB implements ProductDao {
 
     @Override
     public void remove(int id) {
-
+        try (Connection conn = dataSource.getConnection()) {
+            //create sql statement to retrieve all data necessary to create Product object
+            String sql = "DELETE FROM products WHERE id=?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            st.executeQuery();
+    } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
