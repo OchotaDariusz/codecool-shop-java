@@ -15,6 +15,7 @@ public class Product extends BaseModel {
         super(name, description);
         this.setDefaultPrice(defaultPrice);
         this.setSupplier(supplier);
+        this.defaultCurrency(defaultPrice);
         this.setProductCategory(productCategory);
     }
 
