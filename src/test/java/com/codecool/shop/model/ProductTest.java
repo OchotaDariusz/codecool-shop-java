@@ -58,8 +58,36 @@ class ProductTest {
         assertEquals(product.getPriceAsString(), "3 USD");
     }
 
+    @Test
+    public void test_setPrice() {
+        Supplier supplierMock = mock(Supplier.class);
+        ProductCategory productCategoryMock = mock(ProductCategory.class);
+        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", productCategoryMock, supplierMock);
+        BigDecimal newBig = new BigDecimal("7");
+        product.setPrice(newBig, "EUR");
 
+        // Assert value
+        assertEquals(0, product.getPrice().compareTo(newBig));
+        // Assert currency
+        assertEquals(product.getDefaultCurrency().toString(), "EUR");
+    }
 
+    @Test
+    public void test_getProductCategory() {
+        Supplier supplierMock = mock(Supplier.class);
+        ProductCategory productCategory = new ProductCategory("laptop", "Hardware","No desc.");
+        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", productCategory, supplierMock);
+        assertEquals(product.getProductCategory().getName(), "laptop");
+    }
+
+    @Test
+    public void test_setProductCategory() {
+        Supplier supplierMock = mock(Supplier.class);
+        ProductCategory productCategoryMock = mock(ProductCategory.class);
+        Product product = new Product("Name", new BigDecimal("3"), "USD", "Fantastic.", productCategoryMock, supplierMock);
+        BigDecimal newBig = new BigDecimal("7");
+        product.setPrice(newBig, "EUR");
+    }
 
 
 
