@@ -28,6 +28,7 @@ public class Order extends BaseModel {
     private String cardCvv;
     private Map<Product, Integer> cart = new HashMap<>();
 
+
     public Order(int userId) {
         this.amount = new BigDecimal(0);
         this.userId = userId;
@@ -123,6 +124,10 @@ public class Order extends BaseModel {
         return amount;
     }
 
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -171,9 +176,22 @@ public class Order extends BaseModel {
     }
 
     public enum OrderStatus {
-        NEW,
-        PAID,
-        SHIPPED;
+        NEW("new"),
+        PAID("paid"),
+        SHIPPED("shipped");
 
+        String name;
+
+        OrderStatus(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }
