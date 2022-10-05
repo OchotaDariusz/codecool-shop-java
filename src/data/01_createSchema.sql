@@ -36,7 +36,15 @@ CREATE TABLE orders (
                         id          SERIAL      PRIMARY KEY     NOT NULL,
                         customer_id INTEGER                    NOT NULL,
                         status      TEXT                        NOT NULL,
-                        amount      INTEGER                    NOT NULL
+                        amount      INTEGER                    NOT NULL,
+                        first_name   VARCHAR(30)                 NOT NULL,
+                        last_name    VARCHAR(30)                 NOT NULL,
+                        email        VARCHAR(100)                NOT NULL,
+                        address      VARCHAR(30)                 NOT NULL,
+                        address2     VARCHAR(30),
+                        country      VARCHAR(30)                 NOT NULL,
+                        city         VARCHAR(30)                 NOT NULL,
+                        zip          INTEGER
 );
 
 
@@ -49,15 +57,9 @@ CREATE TABLE ordered_products (
 
 CREATE TABLE users (
                        id           SERIAL PRIMARY KEY NOT NULL,
-                       first_name   VARCHAR(30)                 NOT NULL,
-                       last_name    VARCHAR(30)                 NOT NULL,
                        username     VARCHAR(30)                 NOT NULL,
-                       email        VARCHAR(100)                NOT NULL,
-                       address      VARCHAR(30)                 NOT NULL,
-                       address2     VARCHAR(30),
-                       country      VARCHAR(30)                 NOT NULL,
-                       city         VARCHAR(30)                 NOT NULL,
-                       zip          INTEGER
+                       password     varchar(255)                NOT NULL
+
 );
 
 

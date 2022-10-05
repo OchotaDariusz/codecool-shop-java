@@ -132,6 +132,40 @@ public class Order extends BaseModel {
         return userId;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+
+
     public void addProductToCart(Product product) {
         if (cart.containsKey(product)) {
             increaseProductQuantity(product);

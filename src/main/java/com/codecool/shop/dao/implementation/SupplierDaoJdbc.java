@@ -4,10 +4,7 @@ import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.model.Supplier;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +20,19 @@ public class SupplierDaoJdbc implements SupplierDao {
     @Override
     public void add(Supplier supplier){
 
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "INSERT INTO  suppliers (name, description) VALUES (?, ?)";
+            PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, supplier.getName());
+            statement.setString(2, supplier.getDescription());
+
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next(); // Read next returned value - in ths case the first one. See ResultSet docs for more info
+//            supplier.setId(resultSet.getInt(1));
+        } catch (SQLException throwables) {
+            throw new RuntimeException("Error while adding new Supplier", throwables);
+        }
     }
 
     @Override
