@@ -20,7 +20,6 @@ public class ProductDaoJdbc implements ProductDao {
 
     public ProductDaoJdbc(DataSource dataSource) {
         this.dataSource = dataSource;
-        System.out.println("ProductDaoJdbc created");
     }
 
     @Override
@@ -61,11 +60,9 @@ public class ProductDaoJdbc implements ProductDao {
             String defaultCurrency = rs.getString(3);
             ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
             Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
-            System.out.println("Found product in database");
             //System.out.println(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier).toString());
             Product product = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
             product.setId(id);
-            System.out.println(product);
             return product;
         } catch (SQLException e) {
             throw new RuntimeException("Error while reading from CodecoolShop", e);
@@ -129,7 +126,6 @@ public class ProductDaoJdbc implements ProductDao {
     public List<Product> getBy(Supplier supplier) {
         try (Connection conn = dataSource.getConnection()) {
             int id = supplier.getId();
-            System.out.println(id);
             String sql = """
             SELECT  p.name,
                             p.price,
@@ -175,7 +171,6 @@ public class ProductDaoJdbc implements ProductDao {
     public List<Product> getBy(ProductCategory productCategory) {
         try (Connection conn = dataSource.getConnection()) {
             int categoryId = productCategory.getId();
-            System.out.println("Category id:" + categoryId);
             String sql = """
             SELECT  p.name,
                             p.price,

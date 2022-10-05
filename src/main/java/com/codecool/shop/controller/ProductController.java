@@ -61,7 +61,7 @@ public class ProductController extends HttpServlet {
                     null,
                     this.PRODUCT_SERVICE.getProductsForCategory(Integer.parseInt(category))
             );
-        } else if (category == null && supplier != null) {
+        } else if (category == null) {
             setupContextVariables(
                     context,
                     defaultCategory,

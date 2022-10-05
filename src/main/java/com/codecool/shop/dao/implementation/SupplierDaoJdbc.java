@@ -48,8 +48,6 @@ public class SupplierDaoJdbc implements SupplierDao {
                     """;
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
-            System.out.println((id));
-            System.out.println(sql);
             ResultSet rs = st.executeQuery();
             if (!rs.next()) return null;
 
@@ -93,7 +91,6 @@ public class SupplierDaoJdbc implements SupplierDao {
                 supplier.setId(rs.getInt(3));
                 supplierList.add(supplier);
             }
-            System.out.println(supplierList);
             return supplierList;
         } catch (SQLException e){
             throw new RuntimeException(e);
