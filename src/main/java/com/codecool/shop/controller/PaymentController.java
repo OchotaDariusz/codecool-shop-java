@@ -57,7 +57,7 @@ public class PaymentController extends HttpServlet {
         this.order.setAddress2(jsonObject.get("address2").getAsString());
         this.order.setCountry(jsonObject.get("country").getAsString());
         this.order.setCity(jsonObject.get("city").getAsString());
-        this.order.setZip(jsonObject.get("zip").getAsString());
+        this.order.setZip(jsonObject.get("zip").getAsInt());
         this.order.setCardName(jsonObject.get("ccname").getAsString());
         this.order.setCardNumber(jsonObject.get("ccnumber").getAsString());
         this.order.setCardExpiration(jsonObject.get("ccexpiration").getAsString());

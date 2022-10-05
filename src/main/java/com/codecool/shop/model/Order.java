@@ -21,7 +21,7 @@ public class Order extends BaseModel {
     private String address2;
     private String country;
     private String city;
-    private String zip;
+    private int zip;
     private String cardName;
     private String cardNumber;
     private String cardExpiration;
@@ -92,7 +92,7 @@ public class Order extends BaseModel {
         this.city = city;
     }
 
-    public void setZip(String zip) {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 
@@ -160,7 +160,7 @@ public class Order extends BaseModel {
         return city;
     }
 
-    public String getZip() {
+    public int getZip() {
         return zip;
     }
 

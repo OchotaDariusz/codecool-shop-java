@@ -37,13 +37,13 @@ CREATE TABLE orders (
                         customer_id INTEGER                    NOT NULL,
                         status      TEXT                        NOT NULL,
                         amount      INTEGER                    NOT NULL,
-                        first_name   VARCHAR(30)                 NOT NULL,
-                        last_name    VARCHAR(30)                 NOT NULL,
-                        email        VARCHAR(100)                NOT NULL,
-                        address      VARCHAR(30)                 NOT NULL,
+                        first_name   VARCHAR(30),
+                        last_name    VARCHAR(30),
+                        email        VARCHAR(100),
+                        address      VARCHAR(30),
                         address2     VARCHAR(30),
-                        country      VARCHAR(30)                 NOT NULL,
-                        city         VARCHAR(30)                 NOT NULL,
+                        country      VARCHAR(30),
+                        city         VARCHAR(30),
                         zip          INTEGER
 );
 

@@ -20,7 +20,7 @@ public class OrderDaoJdbc implements OrderDao {
     public Order createNewOrder(int userId) {
         Order order = new Order(userId);
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO  orders (customer_id, status, amount, first_name, last_name, email, address, address2, country, city, zip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO  orders (customer_id, status, amount, first_name, last_name, email, address, address2, country, city, zip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, order.getUserId());
             statement.setString(2, order.getOrderStatus().getName());
@@ -32,14 +32,14 @@ public class OrderDaoJdbc implements OrderDao {
             statement.setString(8, order.getAddress2());
             statement.setString(9, order.getCountry());
             statement.setString(10, order.getCity());
-            statement.setString(11, order.getZip());
+            statement.setInt(11, order.getZip());
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next(); // Read next returned value - in ths case the first one. See ResultSet docs for more info
             order.setId(resultSet.getInt(1));
         } catch (SQLException throwables) {
-            throw new RuntimeException("Error while adding new Author", throwables);
+            throw new RuntimeException("Error while createing new order", throwables);
         }
         return order;
     }
@@ -55,7 +55,7 @@ public class OrderDaoJdbc implements OrderDao {
                 return null;
             }
 
-            int customerId = resultSet.getInt(2);
+            int customerId = resultSet.getInt(1);
             Order.OrderStatus status = Order.OrderStatus.valueOf(resultSet.getString(3));
             BigDecimal amount = resultSet.getBigDecimal(4);
 
@@ -63,14 +63,14 @@ public class OrderDaoJdbc implements OrderDao {
             order.setOrderStatus(status);
             order.setAmount(amount);
             order.setId(userId);
-            order.setFirstName(resultSet.getString(5));
-            order.setLastName(resultSet.getString(6));
-            order.setEmail(resultSet.getString(7));
-            order.setAddress(resultSet.getString(8));
-            order.setAddress2(resultSet.getString(9));
-            order.setCountry(resultSet.getString(10));
-            order.setCity(resultSet.getString(11));
-            order.setZip(resultSet.getString(12));
+            order.setFirstName(resultSet.getString(4));
+            order.setLastName(resultSet.getString(5));
+            order.setEmail(resultSet.getString(6));
+            order.setAddress(resultSet.getString(7));
+            order.setAddress2(resultSet.getString(8));
+            order.setCountry(resultSet.getString(9));
+            order.setCity(resultSet.getString(10));
+            order.setZip(resultSet.getInt(11));
             return order;
         } catch (SQLException e) {
             throw new RuntimeException(e);
