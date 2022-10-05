@@ -63,7 +63,7 @@ public class OrderDaoJdbc implements OrderDao {
 
             Order order = new Order(customerId);
             order.setOrderStatus(status);
-            order.setAmount(amount);
+            //order.setAmount(amount);
             order.setId(userId);
             order.setFirstName(resultSet.getString(4));
             order.setLastName(resultSet.getString(5));
