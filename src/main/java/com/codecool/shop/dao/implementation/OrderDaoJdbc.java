@@ -7,6 +7,7 @@ import com.codecool.shop.model.ProductCategory;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.Arrays;
 
 public class OrderDaoJdbc implements OrderDao {
 
@@ -56,7 +57,8 @@ public class OrderDaoJdbc implements OrderDao {
             }
 
             int customerId = resultSet.getInt(1);
-            Order.OrderStatus status = Order.OrderStatus.valueOf(resultSet.getString(3));
+            String statusName = resultSet.getString(2);
+            Order.OrderStatus status= Arrays.stream(Order.OrderStatus.values()).filter(orderStatus -> orderStatus.getName().equals(statusName)).findFirst().get();
             BigDecimal amount = resultSet.getBigDecimal(4);
 
             Order order = new Order(customerId);
