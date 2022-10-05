@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS products cascade ;
-DROP TABLE IF EXISTS product_categories cascade;
-DROP TABLE IF EXISTS suppliers cascade;
-DROP TABLE IF EXISTS orders cascade;
-DROP TABLE IF EXISTS users cascade;
+DROP TABLE IF EXISTS products CASCADE ;
+DROP TABLE IF EXISTS product_categories CASCADE ;
+DROP TABLE IF EXISTS suppliers CASCADE ;
+DROP TABLE IF EXISTS orders CASCADE ;
+DROP TABLE IF EXISTS ordered_products CASCADE ;
+DROP TABLE IF EXISTS users CASCADE ;
 
 
 CREATE TABLE products (
