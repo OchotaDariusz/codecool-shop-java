@@ -16,7 +16,6 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
     private DataSource dataSource;
 
     public ProductCategoryDaoJdbc(DataSource dataSource) {
-
         this.dataSource = dataSource;
     }
 
