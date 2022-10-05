@@ -21,7 +21,7 @@ public class Order extends BaseModel {
     private String address2;
     private String country;
     private String city;
-    private String zip;
+    private int zip;
     private String cardName;
     private String cardNumber;
     private String cardExpiration;
@@ -92,7 +92,7 @@ public class Order extends BaseModel {
         this.city = city;
     }
 
-    public void setZip(String zip) {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 
@@ -131,6 +131,40 @@ public class Order extends BaseModel {
     public int getUserId() {
         return userId;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+
 
     public void addProductToCart(Product product) {
         if (cart.containsKey(product)) {

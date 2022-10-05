@@ -30,7 +30,7 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next(); // Read next returned value - in ths case the first one. See ResultSet docs for more info
-            category.setId(resultSet.getInt(1));
+//            category.setId(resultSet.getInt(1));
         } catch (SQLException throwables) {
             throw new RuntimeException("Error while adding new Author", throwables);
         }

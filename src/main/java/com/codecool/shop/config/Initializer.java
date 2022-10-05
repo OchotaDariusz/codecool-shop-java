@@ -79,7 +79,7 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Galaxy Z Flip4 I Bespoke Edition", new BigDecimal("1169.9"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
         */
         //setting up users
-        userDataStore.add(new User("Tomek"));
+        userDataStore.add(new User("Tomek", "password"));
 
 //        //setting up test order
 //        orderDataStore.add(new Order(1));
