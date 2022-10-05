@@ -7,6 +7,7 @@ import com.codecool.shop.model.ProductCategory;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.Arrays;
 
 public class OrderDaoJdbc implements OrderDao {
 
@@ -22,7 +23,7 @@ public class OrderDaoJdbc implements OrderDao {
         try (Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO  orders (customer_id, status, amount) VALUES (?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, order.getUserId());
+            statement.setInt(1, userId);
             statement.setString(2, order.getOrderStatus().getName());
             statement.setBigDecimal(3, order.getAmount());
             statement.executeUpdate();
@@ -38,7 +39,7 @@ public class OrderDaoJdbc implements OrderDao {
     @Override
     public Order findByUserId(int userId) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "SELECT customer_id, status, amount FROM orders WHERE id = ?";
+            String sql = "SELECT id, status, amount FROM orders WHERE customer_id = ?";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
@@ -46,13 +47,14 @@ public class OrderDaoJdbc implements OrderDao {
                 return null;
             }
 
-            int customerId = resultSet.getInt(2);
-            Order.OrderStatus status = Order.OrderStatus.valueOf(resultSet.getString(3));
-            BigDecimal amount = resultSet.getBigDecimal(4);
-            Order order = new Order(customerId);
+            //int customerId = userId;
+            String statusName = resultSet.getString(2);
+            Order.OrderStatus status= Arrays.stream(Order.OrderStatus.values()).filter(orderStatus -> orderStatus.getName().equals(statusName)).findFirst().get();
+            BigDecimal amount = resultSet.getBigDecimal(3);
+            Order order = new Order(userId);
             order.setOrderStatus(status);
             order.setAmount(amount);
-            order.setId(userId);
+            order.setId(resultSet.getInt(1));
             return order;
         } catch (SQLException e) {
             throw new RuntimeException(e);

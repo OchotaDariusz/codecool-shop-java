@@ -14,6 +14,7 @@ public class AddProductController extends HttpServlet implements ProductRequestI
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+
         try {
             new OrderService(Initializer.orderDataStore).getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
         } catch (IOException e) {

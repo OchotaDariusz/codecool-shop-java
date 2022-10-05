@@ -28,6 +28,7 @@ public class OrderController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             this.order = new OrderService(ORDER_DATA_STORE).getOrderByUserId(1);
+            System.out.println(order);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("cart/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
