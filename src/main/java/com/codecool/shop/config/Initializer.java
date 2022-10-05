@@ -19,6 +19,7 @@ public class Initializer implements ServletContextListener {
     public static ProductCategoryDao productCategoryDataStore;
     public static SupplierDao supplierDataStore;
     public static UserDao userDataStore;
+    public static ProductInCartDao cartDataStore;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -33,6 +34,7 @@ public class Initializer implements ServletContextListener {
         productCategoryDataStore = new ProductCategoryDaoJdbc(connection);
         supplierDataStore = new SupplierDaoJdbc(connection);
         orderDataStore = new OrderDaoJdbc(connection);
+        cartDataStore = new ProductInCartDaoJdbc(connection);
         //productCategoryDataStore = new ProductCategoryDaoMem();
         //supplierDataStore = new SupplierDaoMem();
         //orderDataStore = new OrderDaoMem();

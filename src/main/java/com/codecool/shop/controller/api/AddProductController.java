@@ -1,6 +1,10 @@
 package com.codecool.shop.controller.api;
 
 import com.codecool.shop.config.Initializer;
+import com.codecool.shop.model.Order;
+import com.codecool.shop.model.Product;
+import com.codecool.shop.model.ProductInCart;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 
 import javax.servlet.annotation.WebServlet;
@@ -16,10 +20,15 @@ public class AddProductController extends HttpServlet implements ProductRequestI
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
         try {
-            new OrderService(Initializer.orderDataStore).getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
+            //new OrderService(Initializer.orderDataStore).getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
+            Product requestedProduct = getRequestedProduct(req);
+            Order order = new OrderService(Initializer.orderDataStore).getOrderByUserId(1);
+            ProductInCart pic = new ProductInCart(order.getId(), requestedProduct.getId());
+            new CartService(Initializer.cartDataStore).addProductToCart(requestedProduct, order);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 }
+
