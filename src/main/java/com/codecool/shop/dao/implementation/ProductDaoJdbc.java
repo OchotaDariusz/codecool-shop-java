@@ -33,15 +33,15 @@ public class ProductDaoJdbc implements ProductDao {
         try (Connection conn = dataSource.getConnection()) {
             //create sql statement to retrieve all data necessary to create Product object
             String sql = """
-            SELECT  p.name,\s
-                            p.price,\s
+            SELECT  p.name,
+                            p.price,
                             p.currency,
                             p.description,
             				p_c.name,
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description \s
+                            s.description 
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
@@ -62,8 +62,11 @@ public class ProductDaoJdbc implements ProductDao {
             ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
             Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
             System.out.println("Found product in database");
-            System.out.println(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier).toString());
-            return new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+            //System.out.println(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier).toString());
+            Product product = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+            product.setId(id);
+            System.out.println(product);
+            return product;
         } catch (SQLException e) {
             throw new RuntimeException("Error while reading from CodecoolShop", e);
         }
@@ -94,7 +97,8 @@ public class ProductDaoJdbc implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description 
+                            s.description,
+                            p.id
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
@@ -110,7 +114,10 @@ public class ProductDaoJdbc implements ProductDao {
                 String defaultCurrency = rs.getString(3);
                 ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
                 Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
-                allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));
+                int id = rs.getInt(10);
+                Product newProduct = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+                newProduct.setId(id);
+                allProducts.add(newProduct);
             }
             return allProducts;
         } catch (SQLException e) {
@@ -149,7 +156,10 @@ public class ProductDaoJdbc implements ProductDao {
                 BigDecimal defaultPrice = rs.getBigDecimal(2);
                 String defaultCurrency = rs.getString(3);
                 ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
-                allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));
+                int productId = rs.getInt(10);
+                Product newProduct = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+                newProduct.setId(productId);
+                allProducts.add(newProduct);
             }
             return allProducts;
         } catch (SQLException e) {
@@ -170,7 +180,8 @@ public class ProductDaoJdbc implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description 
+                            s.description,
+                            p.id
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
@@ -188,7 +199,10 @@ public class ProductDaoJdbc implements ProductDao {
                 BigDecimal defaultPrice = rs.getBigDecimal(2);
                 String defaultCurrency = rs.getString(3);
                 Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
-                allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));
+                int productId = rs.getInt(10);
+                Product newProduct = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+                newProduct.setId(productId);
+                allProducts.add(newProduct);
             }
             return allProducts;
         } catch (SQLException e) {

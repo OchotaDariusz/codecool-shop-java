@@ -46,7 +46,6 @@ public class OrderDaoJdbc implements OrderDao {
             if (!resultSet.next()) {
                 return null;
             }
-
             //int customerId = userId;
             String statusName = resultSet.getString(2);
             Order.OrderStatus status= Arrays.stream(Order.OrderStatus.values()).filter(orderStatus -> orderStatus.getName().equals(statusName)).findFirst().get();

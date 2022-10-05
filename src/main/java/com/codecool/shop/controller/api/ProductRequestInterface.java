@@ -16,7 +16,6 @@ public interface ProductRequestInterface {
 
         String productId = req.getReader().readLine();
         System.out.println(productId);
-        productId = "{\"product_id\":\"5\"}";
         JsonObject jsonObject = new Gson().fromJson(productId, JsonObject.class);
         System.out.println(jsonObject);
 
