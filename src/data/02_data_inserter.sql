@@ -22,3 +22,4 @@ INSERT INTO public.products (name, price, currency, description, category_id, su
 INSERT INTO public.products (name, price, currency, description, category_id, supplier_id) VALUES ('Galaxy S22 Ultra', 1249.9, 'USD', 'Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.', 3, 4);
 INSERT INTO public.products (name, price, currency, description, category_id, supplier_id) VALUES ('Galaxy S21 FE 5G', 809, 'USD', 'Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.', 3, 4);
 INSERT INTO public.products (name, price, currency, description, category_id, supplier_id) VALUES ('Galaxy Z Flip4 I Bespoke Edition', 1169.9, 'USD', 'Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.', 3, 4);
+INSERT INTO public.users (first_name, last_name, username, email, address, address2, country, city, zip) VALUES ('Tomek', 'Wiaderny', 'Wiadro', '', '', '', '', '', 1111)

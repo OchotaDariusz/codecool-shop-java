@@ -8,6 +8,7 @@ import com.codecool.shop.model.*;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @WebListener
@@ -22,14 +23,19 @@ public class Initializer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
             ShopDatabaseManager sdb = new ShopDatabaseManager();
-            try {
-                productDataStore = new ProductDaoJdbc(sdb.getConnection());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        productCategoryDataStore = new ProductCategoryDaoMem();
-        supplierDataStore = new SupplierDaoMem();
-        orderDataStore = new OrderDaoMem();
+        DataSource connection;
+        try {
+            connection = sdb.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        productDataStore = new ProductDaoJdbc(connection);
+        productCategoryDataStore = new ProductCategoryDaoJdbc(connection);
+        supplierDataStore = new SupplierDaoJdbc(connection);
+        orderDataStore = new OrderDaoJdbc(connection);
+        //productCategoryDataStore = new ProductCategoryDaoMem();
+        //supplierDataStore = new SupplierDaoMem();
+        //orderDataStore = new OrderDaoMem();
         userDataStore = new UserDaoMem();
 
         /*

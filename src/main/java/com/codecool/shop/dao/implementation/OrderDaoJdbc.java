@@ -22,9 +22,9 @@ public class OrderDaoJdbc implements OrderDao {
         try (Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO  orders (customer_id, status, amount) VALUES (?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, order.getId());
+            statement.setInt(1, order.getUserId());
             statement.setString(2, order.getOrderStatus().getName());
-            statement.setString(3, order.getAmount().toString());
+            statement.setBigDecimal(3, order.getAmount());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next(); // Read next returned value - in ths case the first one. See ResultSet docs for more info
@@ -48,8 +48,7 @@ public class OrderDaoJdbc implements OrderDao {
 
             int customerId = resultSet.getInt(2);
             Order.OrderStatus status = Order.OrderStatus.valueOf(resultSet.getString(3));
-            BigDecimal amount = BigDecimal.valueOf(Long.parseLong(resultSet.getString(4)));
-
+            BigDecimal amount = resultSet.getBigDecimal(4);
             Order order = new Order(customerId);
             order.setOrderStatus(status);
             order.setAmount(amount);
