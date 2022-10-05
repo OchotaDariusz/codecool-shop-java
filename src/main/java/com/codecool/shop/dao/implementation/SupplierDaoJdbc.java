@@ -41,19 +41,23 @@ public class SupplierDaoJdbc implements SupplierDao {
         try (Connection conn = dataSource.getConnection()){
             String sql = """
                 SELECT s.name,
-                        s.description
+                        s.description,
+                        s.id
                 FROM suppliers AS s 
                 WHERE s.id = ?;
                     """;
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
+            System.out.println((id));
+            System.out.println(sql);
             ResultSet rs = st.executeQuery();
             if (!rs.next()) return null;
 
             String name = rs.getString(1);
             String description = rs.getString(2);
-
-            return new Supplier(name,description);
+            Supplier newSupplier = new Supplier(name,description);
+            newSupplier.setId(rs.getInt(3));
+            return newSupplier;
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
@@ -75,9 +79,10 @@ public class SupplierDaoJdbc implements SupplierDao {
 
         try (Connection conn = dataSource.getConnection()) {
             String sql = """
-                SELECT  p.name,
-                        p.description
-                FROM suppliers AS p
+                SELECT  name,
+                        description,
+                        id
+                FROM suppliers
                 """;
             ResultSet rs = conn.createStatement().executeQuery(sql);
             List<Supplier> supplierList = new ArrayList<>();
@@ -85,9 +90,10 @@ public class SupplierDaoJdbc implements SupplierDao {
                 String name = rs.getString(1);
                 String description = rs.getString(2);
                 Supplier supplier = new Supplier(name, description);
+                supplier.setId(rs.getInt(3));
                 supplierList.add(supplier);
             }
-
+            System.out.println(supplierList);
             return supplierList;
         } catch (SQLException e){
             throw new RuntimeException(e);

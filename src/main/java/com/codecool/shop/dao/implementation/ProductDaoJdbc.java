@@ -129,6 +129,7 @@ public class ProductDaoJdbc implements ProductDao {
     public List<Product> getBy(Supplier supplier) {
         try (Connection conn = dataSource.getConnection()) {
             int id = supplier.getId();
+            System.out.println(id);
             String sql = """
             SELECT  p.name,
                             p.price,
@@ -138,17 +139,19 @@ public class ProductDaoJdbc implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description
+                            s.description,
+                            p.id
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
             		LEFT JOIN suppliers AS s
                     ON p.supplier_id = s.id
-                    WHERE s.id=?
+                    WHERE s.id=
             """;
 
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, id);
+            //PreparedStatement st = conn.prepareStatement(sql);
+            //st.setInt(1, id);
+            sql+=id;
             ResultSet rs = conn.createStatement().executeQuery(sql);
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
@@ -195,7 +198,6 @@ public class ProductDaoJdbc implements ProductDao {
             //PreparedStatement st = conn.prepareStatement(sql);
             //st.setInt(1,categoryId );
             sql+=categoryId;
-            System.out.println(sql);
             ResultSet rs = conn.createStatement().executeQuery(sql);
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
