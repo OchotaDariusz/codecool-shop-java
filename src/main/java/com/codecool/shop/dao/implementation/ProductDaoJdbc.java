@@ -12,12 +12,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
-public class ProductDaoDB implements ProductDao {
+public class ProductDaoJdbc implements ProductDao {
 
     private DataSource dataSource;
+
+    public ProductDaoJdbc(DataSource dataSource) {
+        this.dataSource = dataSource;
+        System.out.println("ProductDaoJdbc created");
+    }
 
     @Override
     public void add(Product product) {
@@ -99,9 +103,9 @@ public class ProductDaoDB implements ProductDao {
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
                 String name = rs.getString(1);
-                String description = rs.getString(2);
-                BigDecimal defaultPrice = rs.getBigDecimal(3);
-                String defaultCurrency = rs.getString(4);
+                String description = rs.getString(4);
+                BigDecimal defaultPrice = rs.getBigDecimal(2);
+                String defaultCurrency = rs.getString(3);
                 ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
                 Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
                 allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));

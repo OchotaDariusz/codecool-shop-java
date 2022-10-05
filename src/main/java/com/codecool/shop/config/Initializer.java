@@ -3,13 +3,12 @@ package com.codecool.shop.config;
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.model.*;
-import org.apache.commons.lang3.StringUtils;
 
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.math.BigDecimal;
+import java.sql.SQLException;
 
 @WebListener
 public class Initializer implements ServletContextListener {
@@ -22,13 +21,18 @@ public class Initializer implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        productDataStore = new ProductDaoMem();
+            ShopDatabaseManager sdb = new ShopDatabaseManager();
+            try {
+                productDataStore = new ProductDaoJdbc(sdb.getConnection());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         productCategoryDataStore = new ProductCategoryDaoMem();
         supplierDataStore = new SupplierDaoMem();
         orderDataStore = new OrderDaoMem();
         userDataStore = new UserDaoMem();
 
-        //setting up a new supplier
+        /*
         Supplier amazon = new Supplier("Amazon", "Digital content and services");
         supplierDataStore.add(amazon);
         Supplier lenovo = new Supplier("Lenovo", "Computers");
@@ -65,7 +69,7 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Galaxy S22 Ultra", new BigDecimal("1249.9"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
         productDataStore.add(new Product("Galaxy S21 FE 5G", new BigDecimal("809.0"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
         productDataStore.add(new Product("Galaxy Z Flip4 I Bespoke Edition", new BigDecimal("1169.9"), "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", smartphone, samsung));
-
+        */
         //setting up users
         userDataStore.add(new User("Tomek"));
 

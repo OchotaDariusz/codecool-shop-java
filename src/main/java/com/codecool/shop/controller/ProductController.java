@@ -31,15 +31,6 @@ public class ProductController extends HttpServlet {
     private final OrderDao ORDER_DATA_STORE;
 
 
-    public ProductController(ProductDao productDao, ProductCategoryDao productCategoryDao, SupplierDao supplierDao, OrderDao orderDao) {
-        this.PRODUCT_DATA_STORE = productDao;
-        this.ORDER_DATA_STORE = orderDao;
-        this.PRODUCT_SERVICE = new ProductService(
-                PRODUCT_DATA_STORE,
-                productCategoryDao,
-                supplierDao);
-    }
-
     public ProductController(){
         this.PRODUCT_DATA_STORE = Initializer.productDataStore;
         this.ORDER_DATA_STORE = Initializer.orderDataStore;
