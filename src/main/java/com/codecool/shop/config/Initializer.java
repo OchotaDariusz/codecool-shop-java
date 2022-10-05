@@ -27,7 +27,6 @@ public class Initializer implements ServletContextListener {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        productDataStore = new ProductDaoMem();
         productCategoryDataStore = new ProductCategoryDaoMem();
         supplierDataStore = new SupplierDaoMem();
         orderDataStore = new OrderDaoMem();
