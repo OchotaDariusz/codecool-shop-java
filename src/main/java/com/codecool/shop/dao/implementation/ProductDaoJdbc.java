@@ -121,7 +121,7 @@ public class ProductDaoJdbc implements ProductDao {
             }
             return allProducts;
         } catch (SQLException e) {
-            throw new RuntimeException("Error while reading from CodecoolShop", e);
+            throw new RuntimeException("Error while reading from getALL", e);
         }
     }
 
@@ -138,7 +138,7 @@ public class ProductDaoJdbc implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description 
+                            s.description
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
@@ -146,6 +146,7 @@ public class ProductDaoJdbc implements ProductDao {
                     ON p.supplier_id = s.id
                     WHERE s.id=?
             """;
+
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = conn.createStatement().executeQuery(sql);
@@ -163,14 +164,15 @@ public class ProductDaoJdbc implements ProductDao {
             }
             return allProducts;
         } catch (SQLException e) {
-            throw new RuntimeException("Error while reading from CodecoolShop", e);
+            throw new RuntimeException("Error while reading from getBySupplier", e);
         }
     }
 
     @Override
     public List<Product> getBy(ProductCategory productCategory) {
         try (Connection conn = dataSource.getConnection()) {
-            int id = productCategory.getId();
+            int categoryId = productCategory.getId();
+            System.out.println("Category id:" + categoryId);
             String sql = """
             SELECT  p.name,
                             p.price,
@@ -187,10 +189,13 @@ public class ProductDaoJdbc implements ProductDao {
                     ON p.category_id = p_c.id
             		LEFT JOIN suppliers AS s
                     ON p.supplier_id = s.id
-                    WHERE s.id=?
+                    WHERE p_c.id=
             """;
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, id);
+
+            //PreparedStatement st = conn.prepareStatement(sql);
+            //st.setInt(1,categoryId );
+            sql+=categoryId;
+            System.out.println(sql);
             ResultSet rs = conn.createStatement().executeQuery(sql);
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
@@ -206,7 +211,7 @@ public class ProductDaoJdbc implements ProductDao {
             }
             return allProducts;
         } catch (SQLException e) {
-            throw new RuntimeException("Error while reading from CodecoolShop", e);
+            throw new RuntimeException("Error while reading from getByCategory", e);
         }
     }
 }

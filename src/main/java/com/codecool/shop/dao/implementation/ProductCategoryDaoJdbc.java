@@ -47,9 +47,9 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
                 return null;
             }
 
-            String name = resultSet.getString(2);
-            String desc = resultSet.getString(3);
-            String dep = resultSet.getString(4);
+            String name = resultSet.getString(1);
+            String desc = resultSet.getString(2);
+            String dep = resultSet.getString(3);
 
 
             ProductCategory productCategory = new ProductCategory(name, desc, dep);
