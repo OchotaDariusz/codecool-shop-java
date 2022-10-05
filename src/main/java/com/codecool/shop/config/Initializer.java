@@ -20,6 +20,7 @@ public class Initializer implements ServletContextListener {
     public static ProductCategoryDao productCategoryDataStore;
     public static SupplierDao supplierDataStore;
     public static UserDao userDataStore;
+    public static ProductInCartDao cartDataStore;
     public static Properties appProps;
     public static ProductInCartDao cartDataStore;
 
