@@ -30,4 +30,15 @@ public class ShopDatabaseManager {
 
         return dataSource;
     }
+
+    public DataSource getConnection() throws SQLException {
+        DataSource dataSource;
+        try {
+            dataSource = connect();
+        }
+        catch(SQLException e){
+            throw new SQLException("Problem connecting to PostreSQL database");
+        }
+        return dataSource;
+    }
 }

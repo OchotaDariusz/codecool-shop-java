@@ -12,12 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
-public class ProductDaoDB implements ProductDao {
+public class ProductDaoJdbc implements ProductDao {
 
     private DataSource dataSource;
+
+    public ProductDaoJdbc(DataSource connection) {
+    }
 
     @Override
     public void add(Product product) {
