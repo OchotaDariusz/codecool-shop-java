@@ -1,24 +1,21 @@
 package com.codecool.shop.dao;
 
+import com.codecool.shop.config.Initializer;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ShopDatabaseManager {
 
-    public void setup() throws SQLException {
-        DataSource dataSource = connect();
-//        playerDao = new PlayerDaoJdbc(dataSource);
-//        gameStateDao = new GameStateDaoJdbc(dataSource);
-//        itemDao = new ItemDaoJdbc(dataSource);
-    }
-
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = System.getenv("DB_NAME");
-        String user = System.getenv("USER");
-        String password = System.getenv("PASSWORD");
+
+        Properties appConfig = Initializer.getAppConfig();
+        String dbName = appConfig.getProperty("database");
+        String user = appConfig.getProperty("user");
+        String password = appConfig.getProperty("password");
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);

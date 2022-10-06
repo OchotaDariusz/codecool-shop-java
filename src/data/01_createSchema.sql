@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS products CASCADE ;
 DROP TABLE IF EXISTS product_categories CASCADE ;
 DROP TABLE IF EXISTS suppliers CASCADE ;
 DROP TABLE IF EXISTS orders CASCADE ;
-DROP TABLE IF EXISTS ordered_products CASCADE ;
+DROP TABLE IF EXISTS cart CASCADE ;
 DROP TABLE IF EXISTS users CASCADE ;
 
 
@@ -44,7 +44,7 @@ CREATE TABLE orders (
                         address2     VARCHAR(30),
                         country      VARCHAR(30),
                         city         VARCHAR(30),
-                        zip          INTEGER
+                        zip          VARCHAR(30)
 );
 
 

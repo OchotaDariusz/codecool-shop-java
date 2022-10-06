@@ -46,4 +46,9 @@ public class OrderDaoMem implements OrderDao {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public void finaliseOrder(Order order) {
+
+    }
 }

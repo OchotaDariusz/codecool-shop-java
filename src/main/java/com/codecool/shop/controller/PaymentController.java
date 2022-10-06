@@ -32,7 +32,6 @@ public class PaymentController extends HttpServlet {
     
     
     public PaymentController(){
-
         this.orderDao = Initializer.orderDataStore;
         this.CART_DATA_STORE = Initializer.cartDataStore;
     }
@@ -45,35 +44,19 @@ public class PaymentController extends HttpServlet {
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
-            logger.error("Threw a IOException in PaymentController::doGetMethod, full stack trace follows:", e);
+            logger.error("Threw an IOException in PaymentController::doGetMethod, full stack trace follows:", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            fillOrderDetails(new Gson().fromJson(req.getReader().readLine(), JsonObject.class));
             CART_DATA_STORE.emptyCart(this.order);
+            OrderService service = new OrderService(Initializer.orderDataStore);
+            service.checkoutOrder(new Gson().fromJson(req.getReader().readLine(), JsonObject.class));
         } catch (IOException e) {
-            logger.error("Threw a IOException in PaymentController::doPostMethod, full stack trace follows:", e);
+            logger.error("Threw an IOException in PaymentController::doPostMethod, full stack trace follows:", e);
         }
-    }
-
-    private void fillOrderDetails(JsonObject jsonObject) {
-        this.order.setFirstName(jsonObject.get("firstName").getAsString());
-        this.order.setLastName(jsonObject.get("lastName").getAsString());
-        this.order.setUserName(jsonObject.get("username").getAsString());
-        this.order.setEmail(jsonObject.get("email").getAsString());
-        this.order.setAddress(jsonObject.get("address").getAsString());
-        this.order.setAddress2(jsonObject.get("address2").getAsString());
-        this.order.setCountry(jsonObject.get("country").getAsString());
-        this.order.setCity(jsonObject.get("city").getAsString());
-        this.order.setZip(jsonObject.get("zip").getAsInt());
-        this.order.setCardName(jsonObject.get("ccname").getAsString());
-        this.order.setCardNumber(jsonObject.get("ccnumber").getAsString());
-        this.order.setCardExpiration(jsonObject.get("ccexpiration").getAsString());
-        this.order.setCardCvv(jsonObject.get("cccvv").getAsString());
-        this.order.setOrderStatus(Order.OrderStatus.PAID);
     }
 
     private WebContext initContext(HttpServletRequest req, HttpServletResponse resp) {
