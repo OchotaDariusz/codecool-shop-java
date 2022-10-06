@@ -22,10 +22,18 @@ public class CartService {
     }
      public void addProductToCart(Product product, Order order){
          System.out.println("Cart service, adding product to cart");
-         System.out.println(product);
-         System.out.println(order);
         this.cartDao.addProduct(product, order);
      }
+
+    public void increaseProductInCart(Product product, Order order){
+        System.out.println("Cart service, increasing amount of product in cart");
+        this.cartDao.addProduct(product, order);
+    }
+
+    public void decreaseProductInCart(Product product, Order order){
+        System.out.println("Cart service, decreasing amount of product in cart");
+        this.cartDao.removeProduct(product, order);
+    }
 
 
     public void updateCartInOrder(Order order) {
