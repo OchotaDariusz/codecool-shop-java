@@ -1,33 +1,22 @@
 package com.codecool.shop.model;
 
-
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
-
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductCategoryTest {
 
     @Test
-    public void newProductCategoryIsNotNull(){
-        // given when
+    void test_addProduct() {
         ProductCategory productCategory = new ProductCategory("name", "department", "desc");
-        // then
-        assertThat(productCategory, notNullValue());
-    }
-
-    @Test
-    public void productListIncreaseAfterAddProduct(){
-        // given when
-        ProductCategory productCategory = new ProductCategory("name", "department", "desc");
-        Supplier supplier = new Supplier("lenovo", "desc");
-        Product product = new Product("name", BigDecimal.valueOf(199), "USD","desc", productCategory, supplier );
-        //then
+        Product productMock = mock(Product.class);
+        productCategory.addProduct(productMock);
         assertThat(productCategory.getProducts(), hasSize(1));
     }
 }
