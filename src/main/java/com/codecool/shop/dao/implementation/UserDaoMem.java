@@ -6,6 +6,7 @@ import com.codecool.shop.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserDaoMem implements UserDao {
 
@@ -37,6 +38,14 @@ public class UserDaoMem implements UserDao {
     public User find(int id) {
         return users.stream()
                 .filter(u -> u.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public User find(String username) {
+        return users.stream()
+                .filter(u -> Objects.equals(u.getName(), username))
                 .findFirst()
                 .orElse(null);
     }

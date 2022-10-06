@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,13 @@ public class ProductController extends HttpServlet {
                     this.PRODUCT_SERVICE.getProductsForSupplier(Integer.parseInt(supplier))
             );
         }
+        setupContextSessionVariables(req.getSession(), context);
         return context;
+    }
+
+    private void setupContextSessionVariables(HttpSession session, WebContext context) {
+        if (session.getAttribute("username") != null) context.setVariable("loggedIn", true);
+        else context.setVariable("loggedIn", false);
     }
 
     private void setupContextVariables(WebContext context, Object category, Supplier supplier, List<Product> products) {

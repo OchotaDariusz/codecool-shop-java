@@ -1,8 +1,6 @@
 package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.UserDao;
-import com.codecool.shop.model.Order;
-import com.codecool.shop.model.Supplier;
 import com.codecool.shop.model.User;
 
 import javax.sql.DataSource;
@@ -37,26 +35,52 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public User find(int id) {
 
-        try (Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             String sql = """
-                SELECT username, password
-                        
-                FROM users
-                WHERE id = ?;
-                    """;
+                    SELECT username, password
+                            
+                    FROM users
+                    WHERE id = ?;
+                        """;
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
 
-            String username = rs.getString(1);
-            String password = rs.getString(2);
-
-            User user = new User(username, password);
-            user.setPassword(password);
-            return user;
-        } catch (SQLException e){
+            return getUserFromQueryResult(rs);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public User find(String username) {
+
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = """
+                    SELECT username, password
+                            
+                    FROM users
+                    WHERE username = ?;
+                        """;
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+
+
+            return getUserFromQueryResult(rs);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static User getUserFromQueryResult(ResultSet rs) throws SQLException {
+        rs.next();
+        String username = rs.getString(1);
+        String password = rs.getString(2);
+
+        User user = new User(username, password);
+        user.setPassword(password);
+        return user;
     }
 }

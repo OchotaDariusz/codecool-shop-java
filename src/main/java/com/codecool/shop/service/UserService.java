@@ -14,4 +14,8 @@ public class UserService {
     public User getUserById(int id) {
         return this.userDao.find(id);
     }
+
+    public User getUserByUsername(String username) {
+        return this.userDao.find(username);
+    }
 }
