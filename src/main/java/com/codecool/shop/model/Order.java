@@ -2,8 +2,12 @@ package com.codecool.shop.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Order extends BaseModel {
 
@@ -167,6 +171,8 @@ public class Order extends BaseModel {
 
 
     public void addProductToCart(Product product) {
+        System.out.println("174" + cart);
+        System.out.println(product);
         if (cart.containsKey(product)) {
             increaseProductQuantity(product);
         } else {
@@ -174,6 +180,22 @@ public class Order extends BaseModel {
             amount = amount.add(product.getDefaultPrice());
         }
     }
+
+    public void addProductToCartDB(Product productToAdd) {
+        List<Integer> idsOfProductsInCart = new ArrayList<>();
+        for(Product product: cart.keySet()){
+            idsOfProductsInCart.add(product.getId());
+        }
+        for(Integer id: idsOfProductsInCart){
+            if(productToAdd.getId()==id){
+                cart.keySet().stream().filter(p->p.getId()==id).forEach(p->increaseProductQuantity(p));
+                return;
+            }
+        }
+        cart.put(productToAdd, 1);
+        amount = amount.add(productToAdd.getDefaultPrice());
+    }
+
 
     public void removeProductFromCart(Product product) {
         cart.remove(product);
