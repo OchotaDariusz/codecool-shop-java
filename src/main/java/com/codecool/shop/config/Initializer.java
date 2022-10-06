@@ -3,7 +3,6 @@ package com.codecool.shop.config;
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.model.*;
-import org.apache.commons.lang3.StringUtils;
 
 
 import javax.servlet.ServletContextEvent;
@@ -69,7 +68,7 @@ public class Initializer implements ServletContextListener {
         //setting up users
         userDataStore.add(new User("Tomek"));
 
-//        //setting up test order
+        //setting up test order
 //        orderDataStore.add(new Order(1));
     }
 }

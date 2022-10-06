@@ -7,6 +7,8 @@ import com.codecool.shop.model.Order;
 import com.codecool.shop.service.OrderService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -21,6 +23,7 @@ import java.io.IOException;
 public class PaymentController extends HttpServlet {
     private Order order;
     private final OrderDao orderDao;
+    private static final Logger logger = LogManager.getLogger();
     
     
     public PaymentController(){
@@ -35,7 +38,7 @@ public class PaymentController extends HttpServlet {
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in PaymentController::doGetMethod, full stack trace follows:", e);
         }
     }
 
@@ -44,7 +47,7 @@ public class PaymentController extends HttpServlet {
         try {
             fillOrderDetails(new Gson().fromJson(req.getReader().readLine(), JsonObject.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in PaymentController::doPostMethod, full stack trace follows:", e);
         }
     }
 
