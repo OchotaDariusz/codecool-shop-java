@@ -198,6 +198,10 @@ public class Order extends BaseModel {
         amount = amount.add(product.getDefaultPrice());
     }
 
+    public void emptyCart(){
+        cart.clear();
+    }
+
     public Map<Product, Integer> getCart() {
         return cart;
     }

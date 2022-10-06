@@ -20,7 +20,12 @@ public class OrderService {
 
     public Order getOrderByUserId(int userId) {
         Order order = this.orderDao.findByUserId(userId);
-        if (order == null) return this.orderDao.createNewOrder(userId);
+        if (order == null) {
+            System.out.println("creating new order");
+            return this.orderDao.createNewOrder(userId);
+        } else {
+            System.out.println("using existing order");
+        }
         return order;
     }
 

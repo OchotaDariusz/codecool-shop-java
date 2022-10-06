@@ -2,13 +2,11 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.config.Initializer;
 import com.codecool.shop.config.TemplateEngineUtil;
-import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.dao.ProductCategoryDao;
-import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.*;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import com.codecool.shop.service.ProductService;
 import org.thymeleaf.TemplateEngine;
@@ -25,6 +23,7 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
+    private final ProductInCartDao CART_DATA_STORE;
     private Order order;
     private final ProductDao PRODUCT_DATA_STORE;
     private final ProductService PRODUCT_SERVICE;
@@ -38,6 +37,7 @@ public class ProductController extends HttpServlet {
                 PRODUCT_DATA_STORE,
                 Initializer.productCategoryDataStore,
                 Initializer.supplierDataStore);
+        this.CART_DATA_STORE = Initializer.cartDataStore;
     }
 
 
@@ -99,7 +99,7 @@ public class ProductController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             this.order = new OrderService(ORDER_DATA_STORE).getOrderByUserId(1);
-
+            new CartService(CART_DATA_STORE).updateCartInOrder(this.order);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("product/index.html", setupWebContext(req, resp), resp.getWriter());
         } catch (IOException e) {

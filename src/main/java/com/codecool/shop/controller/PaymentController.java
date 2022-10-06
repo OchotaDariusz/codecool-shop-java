@@ -31,7 +31,7 @@ public class PaymentController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             this.order = new OrderService(orderDao).getOrderByUserId(1);
-
+            System.out.println(this.order);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {

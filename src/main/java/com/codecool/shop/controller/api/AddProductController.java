@@ -23,7 +23,6 @@ public class AddProductController extends HttpServlet implements ProductRequestI
             //new OrderService(Initializer.orderDataStore).getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
             Product requestedProduct = getRequestedProduct(req);
             Order order = new OrderService(Initializer.orderDataStore).getOrderByUserId(1);
-            ProductInCart pic = new ProductInCart(order.getId(), requestedProduct.getId());
             new CartService(Initializer.cartDataStore).addProductToCart(requestedProduct, order);
         } catch (IOException e) {
             e.printStackTrace();

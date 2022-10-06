@@ -21,22 +21,28 @@ public class CartService {
         this.productDatastore = Initializer.productDataStore;
     }
      public void addProductToCart(Product product, Order order){
-         System.out.println("Cart service, adding product to cart");
         this.cartDao.addProduct(product, order);
+        updateCartInOrder(order);
+         System.out.println(order);
      }
 
     public void increaseProductInCart(Product product, Order order){
         System.out.println("Cart service, increasing amount of product in cart");
         this.cartDao.addProduct(product, order);
+        updateCartInOrder(order);
+        System.out.println(order);
     }
 
     public void decreaseProductInCart(Product product, Order order){
         System.out.println("Cart service, decreasing amount of product in cart");
         this.cartDao.removeProduct(product, order);
+        updateCartInOrder(order);
+        System.out.println(order);
     }
 
 
     public void updateCartInOrder(Order order) {
+        order.emptyCart();
         List<Integer> products = this.cartDao.getProductIdsFromCart(order);
         for(Integer productId: products){
             Product product = productDatastore.find(productId);
