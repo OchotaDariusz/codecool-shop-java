@@ -3,7 +3,9 @@ package com.codecool.shop.controller;
 import com.codecool.shop.config.Initializer;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.dao.ProductInCartDao;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -21,17 +23,20 @@ import java.io.IOException;
 public class PaymentController extends HttpServlet {
     private Order order;
     private final OrderDao orderDao;
+    private final ProductInCartDao CART_DATA_STORE;
     
     
     public PaymentController(){
+
         this.orderDao = Initializer.orderDataStore;
+        this.CART_DATA_STORE = Initializer.cartDataStore;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             this.order = new OrderService(orderDao).getOrderByUserId(1);
-            System.out.println(this.order);
+            new CartService(CART_DATA_STORE).updateCartInOrder(this.order);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
