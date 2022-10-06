@@ -45,7 +45,7 @@ public class PaymentController extends HttpServlet {
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
-            logger.error("Threw a IOException in PaymentController::doGetMethod, full stack trace follows:", e);
+            logger.error("Threw an IOException in PaymentController::doGetMethod, full stack trace follows:", e);
         }
     }
 
@@ -55,7 +55,7 @@ public class PaymentController extends HttpServlet {
             OrderService service = new OrderService(Initializer.orderDataStore);
             service.checkoutOrder(new Gson().fromJson(req.getReader().readLine(), JsonObject.class));
         } catch (IOException e) {
-            logger.error("Threw a IOException in PaymentController::doPostMethod, full stack trace follows:", e);
+            logger.error("Threw an IOException in PaymentController::doPostMethod, full stack trace follows:", e);
         }
     }
 
