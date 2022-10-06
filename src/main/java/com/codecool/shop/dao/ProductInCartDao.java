@@ -11,6 +11,7 @@ public interface ProductInCartDao {
     void removeProduct(Product product, Order order);
 
     void removeProductsOfGivenType(Product product, Order order);
+    void emptyCart(Order order);
 
     List<Integer> getProductIdsFromCart(Order order);
 }

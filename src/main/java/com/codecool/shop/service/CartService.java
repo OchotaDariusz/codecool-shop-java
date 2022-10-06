@@ -40,6 +40,10 @@ public class CartService {
         updateCartInOrder(order);
     }
 
+    public void removeAllProducts(Order order){
+        this.cartDao.emptyCart(order);
+    }
+
 
     public void updateCartInOrder(Order order) {
         order.emptyCart();

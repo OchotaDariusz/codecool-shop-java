@@ -53,6 +53,7 @@ public class PaymentController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
             fillOrderDetails(new Gson().fromJson(req.getReader().readLine(), JsonObject.class));
+            CART_DATA_STORE.emptyCart(this.order);
         } catch (IOException e) {
             logger.error("Threw a IOException in PaymentController::doPostMethod, full stack trace follows:", e);
         }

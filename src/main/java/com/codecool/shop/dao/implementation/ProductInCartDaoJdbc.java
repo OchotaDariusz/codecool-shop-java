@@ -74,6 +74,18 @@ public class ProductInCartDaoJdbc implements ProductInCartDao {
     }
 
     @Override
+    public void emptyCart(Order order) {
+        int orderId = order.getId();
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "DELETE FROM cart";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while reading from CodecoolShop", e);
+        }
+    }
+
+    @Override
     public List<Integer> getProductIdsFromCart(Order order) {
         List<Integer> productIds = new ArrayList<>();
         int orderId = order.getId();
