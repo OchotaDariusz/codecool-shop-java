@@ -48,7 +48,7 @@ CREATE TABLE orders (
 );
 
 
-CREATE TABLE ordered_products (
+CREATE TABLE cart (
                                   id          SERIAL      PRIMARY KEY     NOT NULL,
                                   product_id  INTEGER                     NOT NULL,
                                   order_id    INTEGER                     NOT NULL
@@ -73,11 +73,11 @@ ALTER TABLE ONLY products
 ALTER TABLE ONLY orders
     ADD CONSTRAINT fk_orders_customer_id FOREIGN KEY (customer_id) REFERENCES users(id);
 
-ALTER TABLE ONLY ordered_products
-    ADD CONSTRAINT fk_ordered_products_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE ONLY cart
+    ADD CONSTRAINT fk_cart_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 
-ALTER TABLE ONLY ordered_products
-    ADD CONSTRAINT fk_ordered_products_order_id FOREIGN KEY (order_id) REFERENCES orders(id);
+ALTER TABLE ONLY cart
+    ADD CONSTRAINT fk_cart_order_id FOREIGN KEY (order_id) REFERENCES orders(id);
 
 
 
