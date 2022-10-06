@@ -9,7 +9,7 @@ public class Order extends BaseModel {
 
     private BigDecimal amount;
     private OrderStatus status;
-    private int userId;
+    private static int userId;
     private int itemsInCart;
     private LocalDateTime date;
     //storing payment data
@@ -21,7 +21,7 @@ public class Order extends BaseModel {
     private String address2;
     private String country;
     private String city;
-    private int zip;
+    private String zip;
     private String cardName;
     private String cardNumber;
     private String cardExpiration;
@@ -92,7 +92,7 @@ public class Order extends BaseModel {
         this.city = city;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 
@@ -160,7 +160,7 @@ public class Order extends BaseModel {
         return city;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
