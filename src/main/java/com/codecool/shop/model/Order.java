@@ -21,12 +21,13 @@ public class Order extends BaseModel {
     private String address2;
     private String country;
     private String city;
-    private String zip;
+    private int zip;
     private String cardName;
     private String cardNumber;
     private String cardExpiration;
     private String cardCvv;
     private Map<Product, Integer> cart = new HashMap<>();
+
 
     public Order(int userId) {
         this.amount = new BigDecimal(0);
@@ -91,7 +92,7 @@ public class Order extends BaseModel {
         this.city = city;
     }
 
-    public void setZip(String zip) {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 
@@ -123,9 +124,47 @@ public class Order extends BaseModel {
         return amount;
     }
 
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
     public int getUserId() {
         return userId;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+
 
     public void addProductToCart(Product product) {
         if (cart.containsKey(product)) {
@@ -159,6 +198,10 @@ public class Order extends BaseModel {
         amount = amount.add(product.getDefaultPrice());
     }
 
+    public void emptyCart(){
+        cart.clear();
+    }
+
     public Map<Product, Integer> getCart() {
         return cart;
     }
@@ -171,9 +214,22 @@ public class Order extends BaseModel {
     }
 
     public enum OrderStatus {
-        NEW,
-        PAID,
-        SHIPPED;
+        NEW("new"),
+        PAID("paid"),
+        SHIPPED("shipped");
 
+        String name;
+
+        OrderStatus(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

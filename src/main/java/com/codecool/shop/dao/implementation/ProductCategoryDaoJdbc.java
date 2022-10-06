@@ -30,7 +30,7 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next(); // Read next returned value - in ths case the first one. See ResultSet docs for more info
-            category.setId(resultSet.getInt(1));
+//            category.setId(resultSet.getInt(1));
         } catch (SQLException throwables) {
             throw new RuntimeException("Error while adding new Author", throwables);
         }
@@ -39,7 +39,6 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
     @Override
     public ProductCategory find(int id) {
         try (Connection conn = dataSource.getConnection()) {
-            // FIRST STEP - read author_id and title
             String sql = "SELECT name, description, department FROM product_categories WHERE id = ?";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, id);
@@ -48,16 +47,14 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
                 return null;
             }
 
-            String name = resultSet.getString(2);
-            String desc = resultSet.getString(3);
-            String dep = resultSet.getString(4);
+            String name = resultSet.getString(1);
+            String desc = resultSet.getString(2);
+            String dep = resultSet.getString(3);
 
-            // SECOND STEP - find Author id we got as a result of the first query
-//            int productCategoryId = resultSet.getInt(1);
+
             ProductCategory productCategory = new ProductCategory(name, desc, dep);
 
-            // FINISH - create and return new Book class instance
-//            Book book = new Book(author, title);
+
             productCategory.setId(id);
             return productCategory;
         } catch (SQLException e) {

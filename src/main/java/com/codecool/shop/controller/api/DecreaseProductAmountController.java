@@ -1,6 +1,10 @@
 package com.codecool.shop.controller.api;
 
 import com.codecool.shop.config.Initializer;
+import com.codecool.shop.model.Order;
+import com.codecool.shop.model.Product;
+import com.codecool.shop.model.ProductInCart;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +22,11 @@ public class DecreaseProductAmountController extends HttpServlet implements Prod
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            new OrderService(Initializer.orderDataStore).getOrderByUserId(1).decreaseProductQuantity(getRequestedProduct(req));
+            Product requestedProduct = getRequestedProduct(req);
+            Order order = new OrderService(Initializer.orderDataStore).getOrderByUserId(1);
+            ProductInCart pic = new ProductInCart(order.getId(), requestedProduct.getId());
+            new CartService(Initializer.cartDataStore).decreaseProductInCart(requestedProduct, order);
+            //new OrderService(Initializer.orderDataStore).getOrderByUserId(1).decreaseProductQuantity(getRequestedProduct(req));
         } catch (IOException e) {
             logger.error("Threw a IOException in DecreaseProductAmountController::doPostMethod, full stack trace follows:", e);
         }

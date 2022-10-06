@@ -3,7 +3,9 @@ package com.codecool.shop.controller;
 import com.codecool.shop.config.Initializer;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.dao.ProductInCartDao;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -24,17 +26,22 @@ public class PaymentController extends HttpServlet {
     private Order order;
     private final OrderDao orderDao;
     private static final Logger logger = LogManager.getLogger();
+
+    private final ProductInCartDao CART_DATA_STORE;
+
     
     
     public PaymentController(){
+
         this.orderDao = Initializer.orderDataStore;
+        this.CART_DATA_STORE = Initializer.cartDataStore;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             this.order = new OrderService(orderDao).getOrderByUserId(1);
-
+            new CartService(CART_DATA_STORE).updateCartInOrder(this.order);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("payment/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
@@ -60,7 +67,7 @@ public class PaymentController extends HttpServlet {
         this.order.setAddress2(jsonObject.get("address2").getAsString());
         this.order.setCountry(jsonObject.get("country").getAsString());
         this.order.setCity(jsonObject.get("city").getAsString());
-        this.order.setZip(jsonObject.get("zip").getAsString());
+        this.order.setZip(jsonObject.get("zip").getAsInt());
         this.order.setCardName(jsonObject.get("ccname").getAsString());
         this.order.setCardNumber(jsonObject.get("ccnumber").getAsString());
         this.order.setCardExpiration(jsonObject.get("ccexpiration").getAsString());

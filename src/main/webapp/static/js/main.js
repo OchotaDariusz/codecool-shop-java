@@ -59,6 +59,7 @@ function addEventListenerRemoveFilters() {
 addToCartButtons.forEach(addToCartButton => {
     addToCartButton.addEventListener("click", event => {
         let productId = event.target.dataset.productId;
+        console.log(productId);
         addProductToCart(productId).then(() => {
             numberOfProducts.innerText = Number(numberOfProducts.innerText) + 1;
             document.querySelector(".product-added-alert").innerHTML =

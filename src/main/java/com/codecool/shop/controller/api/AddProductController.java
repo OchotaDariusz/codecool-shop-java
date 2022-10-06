@@ -1,6 +1,10 @@
 package com.codecool.shop.controller.api;
 
 import com.codecool.shop.config.Initializer;
+import com.codecool.shop.model.Order;
+import com.codecool.shop.model.Product;
+import com.codecool.shop.model.ProductInCart;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,11 +20,16 @@ public class AddProductController extends HttpServlet implements ProductRequestI
     private static final Logger logger = LogManager.getLogger();
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+
         try {
-            new OrderService(Initializer.orderDataStore).getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
+            //new OrderService(Initializer.orderDataStore).getOrderByUserId(1).addProductToCart(getRequestedProduct(req));
+            Product requestedProduct = getRequestedProduct(req);
+            Order order = new OrderService(Initializer.orderDataStore).getOrderByUserId(1);
+            new CartService(Initializer.cartDataStore).addProductToCart(requestedProduct, order);
         } catch (IOException e) {
             logger.error("Threw a IOException in AddProductController::doPostMethod, full stack trace follows:", e);
         }
     }
 
 }
+

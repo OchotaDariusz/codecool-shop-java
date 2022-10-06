@@ -12,12 +12,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
-public class ProductDaoDB implements ProductDao {
+public class ProductDaoJdbc implements ProductDao {
 
     private DataSource dataSource;
+
+    public ProductDaoJdbc(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void add(Product product) {
@@ -29,15 +32,15 @@ public class ProductDaoDB implements ProductDao {
         try (Connection conn = dataSource.getConnection()) {
             //create sql statement to retrieve all data necessary to create Product object
             String sql = """
-            SELECT  p.name,\s
-                            p.price,\s
+            SELECT  p.name,
+                            p.price,
                             p.currency,
                             p.description,
             				p_c.name,
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description \s
+                            s.description 
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
@@ -52,12 +55,15 @@ public class ProductDaoDB implements ProductDao {
                 return null;
             }
             String name = rs.getString(1);
-            String description = rs.getString(2);
-            BigDecimal defaultPrice = rs.getBigDecimal(3);
-            String defaultCurrency = rs.getString(4);
+            String description = rs.getString(4);
+            BigDecimal defaultPrice = rs.getBigDecimal(2);
+            String defaultCurrency = rs.getString(3);
             ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
             Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
-            return new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+            //System.out.println(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier).toString());
+            Product product = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+            product.setId(id);
+            return product;
         } catch (SQLException e) {
             throw new RuntimeException("Error while reading from CodecoolShop", e);
         }
@@ -88,7 +94,8 @@ public class ProductDaoDB implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description 
+                            s.description,
+                            p.id
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
@@ -99,16 +106,19 @@ public class ProductDaoDB implements ProductDao {
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
                 String name = rs.getString(1);
-                String description = rs.getString(2);
-                BigDecimal defaultPrice = rs.getBigDecimal(3);
-                String defaultCurrency = rs.getString(4);
+                String description = rs.getString(4);
+                BigDecimal defaultPrice = rs.getBigDecimal(2);
+                String defaultCurrency = rs.getString(3);
                 ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
                 Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
-                allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));
+                int id = rs.getInt(10);
+                Product newProduct = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+                newProduct.setId(id);
+                allProducts.add(newProduct);
             }
             return allProducts;
         } catch (SQLException e) {
-            throw new RuntimeException("Error while reading from CodecoolShop", e);
+            throw new RuntimeException("Error while reading from getALL", e);
         }
     }
 
@@ -125,36 +135,42 @@ public class ProductDaoDB implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description 
+                            s.description,
+                            p.id
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
             		LEFT JOIN suppliers AS s
                     ON p.supplier_id = s.id
-                    WHERE s.id=?
+                    WHERE s.id=
             """;
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, id);
+
+            //PreparedStatement st = conn.prepareStatement(sql);
+            //st.setInt(1, id);
+            sql+=id;
             ResultSet rs = conn.createStatement().executeQuery(sql);
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
                 String name = rs.getString(1);
-                String description = rs.getString(2);
-                BigDecimal defaultPrice = rs.getBigDecimal(3);
-                String defaultCurrency = rs.getString(4);
+                String description = rs.getString(4);
+                BigDecimal defaultPrice = rs.getBigDecimal(2);
+                String defaultCurrency = rs.getString(3);
                 ProductCategory productCategory = new ProductCategory(rs.getString(5), rs.getString(6), rs.getString(7));
-                allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));
+                int productId = rs.getInt(10);
+                Product newProduct = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+                newProduct.setId(productId);
+                allProducts.add(newProduct);
             }
             return allProducts;
         } catch (SQLException e) {
-            throw new RuntimeException("Error while reading from CodecoolShop", e);
+            throw new RuntimeException("Error while reading from getBySupplier", e);
         }
     }
 
     @Override
     public List<Product> getBy(ProductCategory productCategory) {
         try (Connection conn = dataSource.getConnection()) {
-            int id = productCategory.getId();
+            int categoryId = productCategory.getId();
             String sql = """
             SELECT  p.name,
                             p.price,
@@ -164,29 +180,35 @@ public class ProductDaoDB implements ProductDao {
                             p_c.department,
                             p_c.description,
             				s.name,
-                            s.description 
+                            s.description,
+                            p.id
                     FROM products AS p
             		LEFT JOIN product_categories AS p_c
                     ON p.category_id = p_c.id
             		LEFT JOIN suppliers AS s
                     ON p.supplier_id = s.id
-                    WHERE s.id=?
+                    WHERE p_c.id=
             """;
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, id);
+
+            //PreparedStatement st = conn.prepareStatement(sql);
+            //st.setInt(1,categoryId );
+            sql+=categoryId;
             ResultSet rs = conn.createStatement().executeQuery(sql);
             List<Product> allProducts = new ArrayList<>();
             while (rs.next()) { // while result set pointer is positioned before or on last row read authors
                 String name = rs.getString(1);
-                String description = rs.getString(2);
-                BigDecimal defaultPrice = rs.getBigDecimal(3);
-                String defaultCurrency = rs.getString(4);
+                String description = rs.getString(4);
+                BigDecimal defaultPrice = rs.getBigDecimal(2);
+                String defaultCurrency = rs.getString(3);
                 Supplier supplier = new Supplier(rs.getString(8), rs.getString(9));
-                allProducts.add(new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier));
+                int productId = rs.getInt(10);
+                Product newProduct = new Product(name, defaultPrice, defaultCurrency, description, productCategory, supplier);
+                newProduct.setId(productId);
+                allProducts.add(newProduct);
             }
             return allProducts;
         } catch (SQLException e) {
-            throw new RuntimeException("Error while reading from CodecoolShop", e);
+            throw new RuntimeException("Error while reading from getByCategory", e);
         }
     }
 }

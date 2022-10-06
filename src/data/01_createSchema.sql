@@ -36,11 +36,19 @@ CREATE TABLE orders (
                         id          SERIAL      PRIMARY KEY     NOT NULL,
                         customer_id INTEGER                    NOT NULL,
                         status      TEXT                        NOT NULL,
-                        amount      INTEGER                    NOT NULL
+                        amount      INTEGER                    NOT NULL,
+                        first_name   VARCHAR(30),
+                        last_name    VARCHAR(30),
+                        email        VARCHAR(100),
+                        address      VARCHAR(30),
+                        address2     VARCHAR(30),
+                        country      VARCHAR(30),
+                        city         VARCHAR(30),
+                        zip          INTEGER
 );
 
 
-CREATE TABLE ordered_products (
+CREATE TABLE cart (
                                   id          SERIAL      PRIMARY KEY     NOT NULL,
                                   product_id  INTEGER                     NOT NULL,
                                   order_id    INTEGER                     NOT NULL
@@ -49,15 +57,9 @@ CREATE TABLE ordered_products (
 
 CREATE TABLE users (
                        id           SERIAL PRIMARY KEY NOT NULL,
-                       first_name   VARCHAR(30)                 NOT NULL,
-                       last_name    VARCHAR(30)                 NOT NULL,
                        username     VARCHAR(30)                 NOT NULL,
-                       email        VARCHAR(100)                NOT NULL,
-                       address      VARCHAR(30)                 NOT NULL,
-                       address2     VARCHAR(30),
-                       country      VARCHAR(30)                 NOT NULL,
-                       city         VARCHAR(30)                 NOT NULL,
-                       zip          INTEGER
+                       password     varchar(255)                NOT NULL
+
 );
 
 
@@ -71,11 +73,11 @@ ALTER TABLE ONLY products
 ALTER TABLE ONLY orders
     ADD CONSTRAINT fk_orders_customer_id FOREIGN KEY (customer_id) REFERENCES users(id);
 
-ALTER TABLE ONLY ordered_products
-    ADD CONSTRAINT fk_ordered_products_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE ONLY cart
+    ADD CONSTRAINT fk_cart_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 
-ALTER TABLE ONLY ordered_products
-    ADD CONSTRAINT fk_ordered_products_order_id FOREIGN KEY (order_id) REFERENCES orders(id);
+ALTER TABLE ONLY cart
+    ADD CONSTRAINT fk_cart_order_id FOREIGN KEY (order_id) REFERENCES orders(id);
 
 
 
