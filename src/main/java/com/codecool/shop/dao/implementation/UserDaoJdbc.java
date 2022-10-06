@@ -18,15 +18,12 @@ public class UserDaoJdbc implements UserDao {
     public void add(User user) {
 
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO  users (username, password) VALUES (?, ?)";
-            PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, user.getName());
             statement.setString(2, user.getPassword());
 
             statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next(); // Read next returned value - in ths case the first one. See ResultSet docs for more info
-//            user.setId(resultSet.getInt(1));
         } catch (SQLException throwables) {
             throw new RuntimeException("Error while adding new User", throwables);
         }
