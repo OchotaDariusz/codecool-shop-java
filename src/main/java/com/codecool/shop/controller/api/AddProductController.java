@@ -6,6 +6,8 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductInCart;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +17,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/api/cart/add")
 public class AddProductController extends HttpServlet implements ProductRequestInterface {
-
+    private static final Logger logger = LogManager.getLogger();
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -25,7 +27,7 @@ public class AddProductController extends HttpServlet implements ProductRequestI
             Order order = new OrderService(Initializer.orderDataStore).getOrderByUserId(1);
             new CartService(Initializer.cartDataStore).addProductToCart(requestedProduct, order);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in AddProductController::doPostMethod, full stack trace follows:", e);
         }
     }
 

@@ -7,6 +7,8 @@ import com.codecool.shop.dao.ProductInCartDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -20,7 +22,11 @@ import java.io.IOException;
 public class OrderController extends HttpServlet {
     private Order order;
     private final OrderDao ORDER_DATA_STORE;
+
+    private static final Logger logger = LogManager.getLogger();
+
     private final ProductInCartDao CART_DATA_STORE;
+
 
 
     public OrderController(){
@@ -40,7 +46,7 @@ public class OrderController extends HttpServlet {
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("cart/index.html", initContext(req, resp), resp.getWriter());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in OrderController::doGetMethod, full stack trace follows:", e);
         }
     }
 

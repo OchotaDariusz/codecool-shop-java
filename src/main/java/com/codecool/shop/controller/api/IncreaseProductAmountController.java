@@ -6,6 +6,8 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductInCart;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/api/cart/increase")
 public class IncreaseProductAmountController extends HttpServlet implements ProductRequestInterface {
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
@@ -24,7 +27,8 @@ public class IncreaseProductAmountController extends HttpServlet implements Prod
             ProductInCart pic = new ProductInCart(order.getId(), requestedProduct.getId());
             new CartService(Initializer.cartDataStore).increaseProductInCart(requestedProduct, order);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in IncreaseProductAmountController::doPostMethod, full stack trace follows:", e);
+
         }
     }
 }

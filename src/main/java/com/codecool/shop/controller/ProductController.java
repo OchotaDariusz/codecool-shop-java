@@ -9,6 +9,8 @@ import com.codecool.shop.model.Supplier;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import com.codecool.shop.service.ProductService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -28,6 +30,7 @@ public class ProductController extends HttpServlet {
     private final ProductDao PRODUCT_DATA_STORE;
     private final ProductService PRODUCT_SERVICE;
     private final OrderDao ORDER_DATA_STORE;
+    private static final Logger logger = LogManager.getLogger();
 
 
     public ProductController(){
@@ -103,7 +106,7 @@ public class ProductController extends HttpServlet {
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             engine.process("product/index.html", setupWebContext(req, resp), resp.getWriter());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in ProductController::doGetMethod, full stack trace follows:", e);
         }
     }
 
