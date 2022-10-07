@@ -3,6 +3,8 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.ProductCategory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -12,6 +14,7 @@ import java.util.Arrays;
 public class OrderDaoJdbc implements OrderDao {
 
     private DataSource dataSource;
+    private static final Logger logger = LogManager.getLogger();
 
     public OrderDaoJdbc(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -32,7 +35,8 @@ public class OrderDaoJdbc implements OrderDao {
             order.setId(resultSet.getInt(1));
             return order;
         } catch (SQLException throwables) {
-            throw new RuntimeException("Error while adding new Order", throwables);
+            logger.error("Threw a SQException in OrderDao::createNewOrderMethod, full stack trace follows:", throwables);
+            
         }
     }
 

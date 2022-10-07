@@ -2,6 +2,8 @@ package com.codecool.shop.config;
 
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -22,6 +24,7 @@ public class Initializer implements ServletContextListener {
     public static UserDao userDataStore;
     public static Properties appProps;
     public static ProductInCartDao cartDataStore;
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -37,6 +40,8 @@ public class Initializer implements ServletContextListener {
             try {
                 connection = sdb.getConnection();
             } catch (SQLException e) {
+                logger.error("Threw a SQLEException in Initializer::contextInitializedMethod, full stack trace follows:", e);
+
                 throw new RuntimeException(e);
             }
             productDataStore = new ProductDaoJdbc(connection);
@@ -72,7 +77,8 @@ public class Initializer implements ServletContextListener {
         try {
             appProps.load(new FileInputStream(appConfigPath));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Threw a IOException in Initializer::getAppConfigMethod, full stack trace follows:", e);
+
             return null;
         }
 
